@@ -20,13 +20,15 @@ type Block struct {
 
 func (block *Block) SetHash() {
 	// 1. 时间转字节数组
+	//(1) init64转化为字符串
 	timeString := strconv.FormatInt(block.Timestamp, 2)
-
+	//（2）字符串转化为字节数组
 	timestamp := []byte(timeString)
-
+    //  2.以字节数组方式拼接 上一区块hash,当前区块数据，时间戳
 	headers := bytes.Join([][]byte{block.PrevBlockHash, block.Data, timestamp}, []byte{})
+	//3.数据进行256hash
 	hash := sha256.Sum256(headers)
-
+	//4.hash设置为当前 hash.
 	block.Hash = hash[:]
 }
 
