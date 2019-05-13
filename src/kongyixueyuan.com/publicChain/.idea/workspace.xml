@@ -2,9 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0cb6de44-7942-4f36-b536-a98b4a67b72b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/part2-proof-of-work/BLC/biu.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/part2-proof-of-work/BLC/printer.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/part2-proof-of-work/BLC/biu.go" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/part2-proof-of-work/BLC/proofOfWork.go" beforeDir="false" afterPath="$PROJECT_DIR$/part2-proof-of-work/BLC/proofOfWork.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/part2-proof-of-work/BLC/utils.go" beforeDir="false" afterPath="$PROJECT_DIR$/part2-proof-of-work/BLC/utils.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/part2-proof-of-work/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/part2-proof-of-work/main.go" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -62,24 +65,24 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="go" value="979" />
+          <entry key="go" value="1891" />
           <entry key="txt" value="6" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Go" value="979" />
+          <entry key="Go" value="1891" />
           <entry key="PLAIN_TEXT" value="6" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="go" value="13" />
+          <entry key="go" value="16" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Go" value="13" />
+          <entry key="Go" value="16" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.go.postfix.template.usages.trigger">
@@ -95,8 +98,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/part2-proof-of-work/BLC/block.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="266">
-              <caret line="56" lean-forward="true" selection-start-line="56" selection-end-line="56" />
+            <state relative-caret-position="281">
+              <caret line="31" column="25" selection-start-line="31" selection-start-column="19" selection-end-line="31" selection-end-column="25" />
               <folding>
                 <element signature="e#13#68#0" expanded="true" />
               </folding>
@@ -107,7 +110,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/part1-Basic-Prototype/BLC/block.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
+            <state relative-caret-position="-173">
               <caret line="20" column="31" selection-start-line="20" selection-start-column="31" selection-end-line="20" selection-end-column="31" />
             </state>
           </provider>
@@ -116,19 +119,19 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/part2-proof-of-work/BLC/blockchain.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="209">
-              <caret line="11" selection-start-line="11" selection-end-line="11" />
+            <state relative-caret-position="205">
+              <caret line="12" column="22" lean-forward="true" selection-start-line="12" selection-start-column="22" selection-end-line="12" selection-end-column="22" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/part2-proof-of-work/BLC/proofOfWork.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="114">
-              <caret line="21" column="28" selection-start-line="21" selection-start-column="28" selection-end-line="21" selection-end-column="28" />
+            <state relative-caret-position="315">
+              <caret line="47" column="5" lean-forward="true" selection-start-line="47" selection-start-column="5" selection-end-line="47" selection-end-column="5" />
               <folding>
-                <element signature="e#13#66#0" expanded="true" />
+                <element signature="e#16#106#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -137,8 +140,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/part2-proof-of-work/main.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="114">
-              <caret line="6" column="1" lean-forward="true" selection-start-line="6" selection-start-column="1" selection-end-line="6" selection-end-column="1" />
+            <state relative-caret-position="76">
+              <caret line="16" column="1" lean-forward="true" selection-start-line="16" selection-start-column="1" selection-end-line="16" selection-end-column="1" />
               <folding>
                 <element signature="e#14#96#0" expanded="true" />
               </folding>
@@ -149,19 +152,10 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/part2-proof-of-work/BLC/utils.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="114">
-              <caret line="10" column="5" selection-start-line="10" selection-start-column="5" selection-end-line="10" selection-end-column="5" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/part1-Basic-Prototype/main.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="12" lean-forward="true" selection-start-column="12" selection-end-column="12" />
+            <state relative-caret-position="209">
+              <caret line="11" column="13" selection-start-line="11" selection-start-column="5" selection-end-line="11" selection-end-column="13" />
               <folding>
-                <element signature="e#14#98#0" expanded="true" />
+                <element signature="e#13#58#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -170,19 +164,28 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://C:/go1.12.4.windows-amd64/go/src/math/big/int.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="867">
-              <caret line="936" column="14" selection-start-line="936" selection-start-column="14" selection-end-line="936" selection-end-column="14" />
+            <state relative-caret-position="164">
+              <caret line="67" column="25" selection-start-line="67" selection-start-column="22" selection-end-line="67" selection-end-column="25" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/part2-proof-of-work/BLC/biu.go">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/part1-Basic-Prototype/BLC/blockchain.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1197">
-              <caret line="63" column="39" selection-start-line="63" selection-start-column="39" selection-end-line="63" selection-end-column="39" />
+            <state relative-caret-position="228">
+              <caret line="12" column="22" selection-start-line="12" selection-start-column="22" selection-end-line="12" selection-end-column="22" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/part2-proof-of-work/BLC/printer.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="171">
+              <caret line="28" column="36" lean-forward="true" selection-start-line="28" selection-start-column="36" selection-end-line="28" selection-end-column="36" />
               <folding>
-                <element signature="e#13#43#0" expanded="true" />
+                <element signature="e#13#36#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -200,6 +203,8 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>data</find>
+      <find>IntToHex</find>
+      <find>hash</find>
     </findStrings>
   </component>
   <component name="GOROOT" path="C:/go1.12.4.windows-amd64/go" />
@@ -219,11 +224,12 @@
         <option value="$PROJECT_DIR$/part1-Basic-Prototype/BLC/blockchain.go" />
         <option value="$PROJECT_DIR$/part1-Basic-Prototype/main.go" />
         <option value="$PROJECT_DIR$/part1-Basic-Prototype/BLC/block.go" />
-        <option value="$PROJECT_DIR$/part2-proof-of-work/BLC/utils.go" />
         <option value="$PROJECT_DIR$/part2-proof-of-work/BLC/block.go" />
-        <option value="$PROJECT_DIR$/part2-proof-of-work/main.go" />
-        <option value="$PROJECT_DIR$/part2-proof-of-work/BLC/proofOfWork.go" />
         <option value="$PROJECT_DIR$/part2-proof-of-work/BLC/biu.go" />
+        <option value="$PROJECT_DIR$/part2-proof-of-work/main.go" />
+        <option value="$PROJECT_DIR$/part2-proof-of-work/BLC/printer.go" />
+        <option value="$PROJECT_DIR$/part2-proof-of-work/BLC/utils.go" />
+        <option value="$PROJECT_DIR$/part2-proof-of-work/BLC/proofOfWork.go" />
       </list>
     </option>
   </component>
@@ -234,10 +240,10 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="285" />
-    <option name="y" value="96" />
+    <option name="x" value="471" />
+    <option name="y" value="213" />
     <option name="width" value="1195" />
-    <option name="height" value="831" />
+    <option name="height" value="855" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -289,7 +295,7 @@
     <property name="GO_FMT" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1557721892193" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1557741005106" />
     <property name="configurable.Global.GOPATH.is.expanded" value="true" />
     <property name="configurable.Module.GOPATH.is.expanded" value="false" />
     <property name="configurable.Project.GOPATH.is.expanded" value="true" />
@@ -297,7 +303,7 @@
     <property name="last_opened_file_path" value="C:/software_down/btc/hosts-master" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.selected.configurable" value="com.goide.configuration.GoLibrariesConfigurableProvider" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -361,7 +367,7 @@
       <workItem from="1557195665936" duration="25355000" />
       <workItem from="1557300597364" duration="7666000" />
       <workItem from="1557392474173" duration="8744000" />
-      <workItem from="1557708686948" duration="5772000" />
+      <workItem from="1557708686948" duration="14549000" />
     </task>
     <task id="LOCAL-00001" summary="commit">
       <created>1557714149016</created>
@@ -370,17 +376,24 @@
       <option name="project" value="LOCAL" />
       <updated>1557714149016</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="commit">
+      <created>1557721906373</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1557721906373</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="54893000" />
+    <option name="totallyTimeSpent" value="63670000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="285" y="96" width="1195" height="831" extended-state="0" />
+    <frame x="273" y="511" width="1195" height="854" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.14361234" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2290749" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -389,14 +402,14 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.6810573" visible="true" weight="0.18911175" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.83612335" visible="true" weight="0.24410541" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49867842" weight="0.39971346" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Terminal" order="8" weight="0.23248407" />
-      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.31894273" side_tool="true" visible="true" weight="0.18911175" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.16387665" side_tool="true" visible="true" weight="0.24410541" />
       <window_info anchor="bottom" id="Version Control" order="10" show_stripe_button="false" />
       <window_info anchor="bottom" id="Messages" order="11" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -457,13 +470,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://C:/go1.12.4.windows-amd64/go/src/builtin/builtin.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3026">
-          <caret line="87" column="5" selection-start-line="87" selection-start-column="5" selection-end-line="87" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://C:/go1.12.4.windows-amd64/go/src/time/format.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="8911">
@@ -471,31 +477,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/part1-Basic-Prototype/BLC/blockchain.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="12" column="22" selection-start-line="12" selection-start-column="22" selection-end-line="12" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://C:/go1.12.4.windows-amd64/go/src/strconv/itoa.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="190">
           <caret line="24" column="5" selection-start-line="24" selection-start-column="5" selection-end-line="24" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/part1-Basic-Prototype/BLC/block.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="20" column="31" selection-start-line="20" selection-start-column="31" selection-end-line="20" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/part2-proof-of-work/BLC/utils.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
-          <caret line="10" column="5" selection-start-line="10" selection-start-column="5" selection-end-line="10" selection-end-column="5" />
         </state>
       </provider>
     </entry>
@@ -511,54 +496,95 @@
     </entry>
     <entry file="file://C:/go1.12.4.windows-amd64/go/src/math/big/int.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="867">
-          <caret line="936" column="14" selection-start-line="936" selection-start-column="14" selection-end-line="936" selection-end-column="14" />
+        <state relative-caret-position="164">
+          <caret line="67" column="25" selection-start-line="67" selection-start-column="22" selection-end-line="67" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/part1-Basic-Prototype/BLC/block.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-173">
+          <caret line="20" column="31" selection-start-line="20" selection-start-column="31" selection-end-line="20" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/go1.12.4.windows-amd64/go/src/builtin/builtin.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="190">
+          <caret line="78" column="5" selection-start-line="78" selection-start-column="5" selection-end-line="78" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/part1-Basic-Prototype/BLC/blockchain.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="12" column="22" selection-start-line="12" selection-start-column="22" selection-end-line="12" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/part2-proof-of-work/BLC/biu.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="114">
+          <caret line="8" column="6" lean-forward="true" selection-start-line="7" selection-end-line="94" selection-end-column="1" />
+          <folding>
+            <element signature="e#13#43#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/part2-proof-of-work/main.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
-          <caret line="6" column="1" lean-forward="true" selection-start-line="6" selection-start-column="1" selection-end-line="6" selection-end-column="1" />
+        <state relative-caret-position="76">
+          <caret line="16" column="1" lean-forward="true" selection-start-line="16" selection-start-column="1" selection-end-line="16" selection-end-column="1" />
           <folding>
             <element signature="e#14#96#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/part2-proof-of-work/BLC/blockchain.go">
+    <entry file="file://$PROJECT_DIR$/part2-proof-of-work/BLC/printer.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="209">
-          <caret line="11" selection-start-line="11" selection-end-line="11" />
+        <state relative-caret-position="171">
+          <caret line="28" column="36" lean-forward="true" selection-start-line="28" selection-start-column="36" selection-end-line="28" selection-end-column="36" />
+          <folding>
+            <element signature="e#13#36#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/part2-proof-of-work/BLC/proofOfWork.go">
+    <entry file="file://$PROJECT_DIR$/part2-proof-of-work/BLC/utils.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
-          <caret line="21" column="28" selection-start-line="21" selection-start-column="28" selection-end-line="21" selection-end-column="28" />
+        <state relative-caret-position="209">
+          <caret line="11" column="13" selection-start-line="11" selection-start-column="5" selection-end-line="11" selection-end-column="13" />
           <folding>
-            <element signature="e#13#66#0" expanded="true" />
+            <element signature="e#13#58#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/part2-proof-of-work/BLC/blockchain.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="205">
+          <caret line="12" column="22" lean-forward="true" selection-start-line="12" selection-start-column="22" selection-end-line="12" selection-end-column="22" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/part2-proof-of-work/BLC/block.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
-          <caret line="56" lean-forward="true" selection-start-line="56" selection-end-line="56" />
+        <state relative-caret-position="281">
+          <caret line="31" column="25" selection-start-line="31" selection-start-column="19" selection-end-line="31" selection-end-column="25" />
           <folding>
             <element signature="e#13#68#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/part2-proof-of-work/BLC/biu.go">
+    <entry file="file://$PROJECT_DIR$/part2-proof-of-work/BLC/proofOfWork.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1197">
-          <caret line="63" column="39" selection-start-line="63" selection-start-column="39" selection-end-line="63" selection-end-column="39" />
+        <state relative-caret-position="315">
+          <caret line="47" column="5" lean-forward="true" selection-start-line="47" selection-start-column="5" selection-end-line="47" selection-end-column="5" />
           <folding>
-            <element signature="e#13#43#0" expanded="true" />
+            <element signature="e#16#106#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -18,6 +18,8 @@ const (
 
 func main() {
 
+	BLC.Test();
+
 	blockchain := BLC.NewBlockchain()
 	blockchain.AddBlock("send ben 20 btc")
 	blockchain.AddBlock("send ben -> bobi 50 btc")
