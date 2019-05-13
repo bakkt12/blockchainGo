@@ -13,9 +13,9 @@ type Block struct {
 	//上一个区块Hash
 	PrevBlockHash []byte
 	//交易数据
-	Data [] byte
+	Data []byte
 	//当前区块Hash
-	Hash [] byte
+	Hash []byte
 	//Nonce 随机数
 	Nonce int
 }
@@ -36,17 +36,21 @@ func (block *Block) SetHash() {
 
 /**
   产生新的区块工厂方法，
- */
+*/
 func NewBlock(data string, prevBlockHash []byte) *Block {
-	//block := &Block{Timestamp: time.Now().Unix(), PrevBlockHash: prevBlockHash, Data: []byte(data), Hash: []byte{},0}
-	//fmt.Println(block)
-	//block.SetHash()
+	block := &Block{time.Now().Unix(), prevBlockHash, []byte(data), []byte{}, 0}
 
-block :=&Block{time.Now().Unix(),prevBlockHash,[]byte(data),[]byte{},0}
+	pow := NewProofOfWork(block)
 
-	return block;
+	//执行工作量证明
+	//	noce, hash := pow.Run()
+	pow.Run()
+	//block.Hash = hash[:]
+	//block.Nonce = noce
+	return block
 }
 
+//创建创世区块
 func NewGenesisBlock() *Block {
 	return NewBlock("Genenis Block", []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
 }
