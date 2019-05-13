@@ -18,8 +18,6 @@ const (
 
 func main() {
 
-	BLC.Test();
-
 	blockchain := BLC.NewBlockchain()
 	blockchain.AddBlock("send ben 20 btc")
 	blockchain.AddBlock("send ben -> bobi 50 btc")
@@ -33,5 +31,8 @@ func main() {
 	//	fmt.Println( blockchain)
 	for _, block := range blockchain.Blocks {
 		fmt.Printf("Data:%s ,PreBlockHash:%x ,Hash:%x,Timestamp:%v \n", block.Data, block.PrevBlockHash, block.Hash, time.Unix(block.Timestamp, 0).Format(newdatetime))
+		fmt.Printf( "Hash  :%x \n",block.Hash)
+
+		fmt.Printf( "Nonce :%b \n",block.Nonce)
 	}
 }

@@ -3,6 +3,7 @@ package BLC
 import (
 	"bytes"
 	"crypto/sha256"
+	"fmt"
 	"strconv"
 	"time"
 )
@@ -39,14 +40,19 @@ func (block *Block) SetHash() {
 */
 func NewBlock(data string, prevBlockHash []byte) *Block {
 	block := &Block{time.Now().Unix(), prevBlockHash, []byte(data), []byte{}, 0}
-
+	//将block作为参数 创建一个pow对象
 	pow := NewProofOfWork(block)
 
-	//执行工作量证明
-	//	noce, hash := pow.Run()
-	pow.Run()
-	//block.Hash = hash[:]
-	//block.Nonce = noce
+	//执行一次工作量证明
+	noce, hash := pow.Run()
+	//设置区块Hash
+	block.Hash = hash[:]
+	//设置Nonce
+	block.Nonce = noce
+
+	isValid := pow.validate();
+	fmt.Println(isValid)
+	
 	return block
 }
 

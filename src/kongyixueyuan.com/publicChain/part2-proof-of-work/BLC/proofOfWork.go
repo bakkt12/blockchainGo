@@ -8,7 +8,7 @@ import (
 	"math/big"
 )
 
-const targetBits = 24
+const targetBits = 20
 
 var (
 	//定义最大
@@ -30,7 +30,6 @@ func (pow *ProofOfWork) prepareData(nonce int) []byte {
 			IntToHex(int64(nonce)),
 		}, []byte{},
 	)
-
 	return data;
 }
 
@@ -50,11 +49,13 @@ func (pow *ProofOfWork) Run() (int, []byte) {
 		//  hasint > pow .target -1   1
 		if hashInt.Cmp(pow.target) == -1 {
 			break
-		}else{
+		} else {
 			nonce++
 		}
 	}
-	return nonce, []byte{};
+
+	fmt.Println("\n\n")
+	return nonce, hash[:];
 }
 
 func NewProofOfWork(block *Block) *ProofOfWork {
@@ -70,4 +71,18 @@ func NewProofOfWork(block *Block) *ProofOfWork {
 
 	pow := &ProofOfWork{block, target}
 	return pow
+}
+
+func (pow *ProofOfWork) validate() bool {
+
+	var hashInt big.Int
+	data := pow.prepareData(pow.block.Nonce)
+
+	hash := sha256.Sum256(data)
+	hashInt.SetBytes(hash[:])
+
+	isValid := hashInt.Cmp(pow.target) == -1
+
+	return isValid
+
 }
