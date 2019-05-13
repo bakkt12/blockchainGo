@@ -45,6 +45,14 @@ func (pow *ProofOfWork) Run() (int, []byte) {
 		hash = sha256.Sum256(data)
 		fmt.Printf("\r %x", hash)
 		hashInt.SetBytes(hash[:])
+		//  hasint < pow .target -1
+		//  hasint = pow .target -1  0
+		//  hasint > pow .target -1   1
+		if hashInt.Cmp(pow.target) == -1 {
+			break
+		}else{
+			nonce++
+		}
 	}
 	return nonce, []byte{};
 }
