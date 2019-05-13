@@ -2,7 +2,6 @@ package BLC
 
 import (
 	"fmt"
-	"github.com/imroc/biu"
 	"math/big"
 )
 
@@ -19,6 +18,8 @@ func (pow *ProofOfWork) Run() {
 
 func NewProofOfWork(block *Block) *ProofOfWork {
 	target := big.NewInt(1)
+
+	fmt.Println(byte(target))
 	fmt.Println(target)
 	target.Lsh(target, uint(256-targetBits))
 	fmt.Printf("%d \n", target)
