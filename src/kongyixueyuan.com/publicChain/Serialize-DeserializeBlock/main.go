@@ -11,6 +11,6 @@ func main() {
   fmt.Println(blockchain)
   fmt.Printf("tip: %x\n",blockchain.Tip)
 
-
-
+	blockchain.AddBlock("send ben100 btc")
+	fmt.Printf("tip: %x\n",blockchain.Tip)
 }

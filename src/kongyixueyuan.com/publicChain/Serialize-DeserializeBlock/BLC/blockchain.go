@@ -27,19 +27,16 @@ func (blockchain *Blockchain) AddBlock(data string) {
 	////2 加到blockchain里面
 	//blockchain.Blocks = append(blockchain.Blocks, newBlock)
 
-	//=====================================================
 	//1.创建区块
 	newBlock := NewBlock(data, blockchain.Tip)
 
 	//2. update 数据库
 	err := blockchain.DB.Update(func(tx *bolt.Tx) error {
 		//2.1获取表
-		b, err := tx.CreateBucket([]byte(blocksBucket))
-		if err != nil {
-			log.Panic(err)
-		}
+		b := tx.Bucket([]byte(blocksBucket))
 
-		err = b.Put(newBlock.Hash, newBlock.Serialize())
+
+		err := b.Put(newBlock.Hash, newBlock.Serialize())
 		if err != nil {
 			log.Panic(err)
 		}
