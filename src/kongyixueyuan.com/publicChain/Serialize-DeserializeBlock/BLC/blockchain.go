@@ -28,9 +28,34 @@ func (blockchain *Blockchain) AddBlock(data string) {
 	//blockchain.Blocks = append(blockchain.Blocks, newBlock)
 
 	//=====================================================
+	//1.创建区块
+	newBlock := NewBlock(data, blockchain.Tip)
 
+	//2. update 数据库
+	err := blockchain.DB.Update(func(tx *bolt.Tx) error {
+		//2.1获取表
+		b, err := tx.CreateBucket([]byte(blocksBucket))
+		if err != nil {
+			log.Panic(err)
+		}
 
+		err = b.Put(newBlock.Hash, newBlock.Serialize())
+		if err != nil {
+			log.Panic(err)
+		}
+		//更新 l对应的Hash
+		err = b.Put([]byte("L"), newBlock.Hash)
+		if err != nil {
+			log.Panic(err)
+		}
+		//将最新的区块存储到blockchain tip中。
+		blockchain.Tip = newBlock.Hash;
+		return nil
+	})
 
+	if err != nil {
+		log.Panic(err)
+	}
 }
 
 //创建一个带有创或区块的区块键
@@ -62,12 +87,12 @@ func NewBlockchain() *Blockchain {
 				log.Panic(err)
 			}
 			//创世区块序列之后的数据存储到表中
-			err =b.Put(genesisBlock.Hash,genesisBlock.Serialize())
+			err = b.Put(genesisBlock.Hash, genesisBlock.Serialize())
 			if err != nil {
 				log.Panic(err)
 			}
 
-			err =b.Put([]byte("L"),genesisBlock.Hash)
+			err = b.Put([]byte("L"), genesisBlock.Hash)
 			if err != nil {
 				log.Panic(err)
 			}
