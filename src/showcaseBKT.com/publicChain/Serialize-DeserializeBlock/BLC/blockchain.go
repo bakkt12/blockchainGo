@@ -11,6 +11,7 @@ const dbFile = "blockchain.db"
 
 //表
 const blocksBucket = "blocks"
+const TIP= "L"
 
 type Blockchain struct {
 	//Blocks []*Block //存储有序的区块
@@ -20,13 +21,15 @@ type Blockchain struct {
 
 //新增区块
 func (blockchain *Blockchain) AddBlock(data string) {
-	////1.创新区块
+	/*##################旧逻辑#############################################**/
+	//1.创新区块
 	//preBlock := blockchain.Blocks[len(blockchain.Blocks)-1]
 	//newBlock := NewBlock(data, preBlock.Hash)
-	//
-	////2 加到blockchain里面
+	//2 加到blockchain里面
 	//blockchain.Blocks = append(blockchain.Blocks, newBlock)
+	/*##################################################################**/
 
+	//用数据库来存放整个区块
 	//1.创建区块
 	newBlock := NewBlock(data, blockchain.Tip)
 
@@ -39,7 +42,7 @@ func (blockchain *Blockchain) AddBlock(data string) {
 			log.Panic(err)
 		}
 		//更新 l对应的Hash
-		err = b.Put([]byte("L"), newBlock.Hash)
+		err = b.Put([]byte(TIP), newBlock.Hash)
 		if err != nil {
 			log.Panic(err)
 		}
@@ -75,7 +78,7 @@ func NewBlockchain() *Blockchain {
 		//表不存
 		if b == nil {
 			fmt.Println(" No existing blockchain found. create a new one.")
-			//创建创世区块
+			//表不存认为区块为空，需要首次创建创世区块
 			genesisBlock := NewGenesisBlock()
 			//创建表
 			b, err = tx.CreateBucket([]byte(blocksBucket))
@@ -88,15 +91,16 @@ func NewBlockchain() *Blockchain {
 				log.Panic(err)
 			}
 
-			err = b.Put([]byte("L"), genesisBlock.Hash)
+			err = b.Put([]byte(TIP), genesisBlock.Hash)
 			if err != nil {
 				log.Panic(err)
 			}
 
 			tip = genesisBlock.Hash
-		} else { //表存在
+		} else {
+			//表存在
 			//KEY:L ,value为最后一个区块hash
-			tip = b.Get([]byte("L"))
+			tip = b.Get([]byte(TIP))
 		}
 		return nil
 	})
