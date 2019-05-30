@@ -34,11 +34,7 @@ func (cli *CLI) Run() {
 	printChainCmd := flag.NewFlagSet("printchain", flag.ExitOnError)
 
 	addBlockData := addBlockCmd.String("data", "", "Block")
-	fmt.Printf("os args %s \n", os.Args)
 
-	if len(os.Args) < 2 {
-
-	}
 	switch os.Args[1] {
 
 	case "addblock":
