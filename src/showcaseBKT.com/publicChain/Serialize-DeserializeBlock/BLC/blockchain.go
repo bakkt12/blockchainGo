@@ -11,12 +11,45 @@ const dbFile = "blockchain.db"
 
 //表
 const blocksBucket = "blocks"
-const TIP= "L"
+
+const TIP = "L"
 
 type Blockchain struct {
 	//Blocks []*Block //存储有序的区块
 	Tip []byte   //区块键里最后一个区块的Hash
 	DB  *bolt.DB //数据库
+}
+
+type BlockchainIterator struct {
+	CurrentHash []byte   //当前正在遍历的区块hash
+	DB          *bolt.DB //数据库
+}
+
+//迭代器
+func (blockchain *Blockchain) Iterator() *BlockchainIterator {
+	return &BlockchainIterator{blockchain.Tip, blockchain.DB}
+}
+
+//获取前一个迭代器
+func (bi *BlockchainIterator) Next() *BlockchainIterator {
+	var nextHash []byte
+
+	err := bi.DB.View(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte(blocksBucket))
+		currentBlockBytes := b.Get([]byte(bi.CurrentHash))
+
+		currentBlock := DeserializeBlock(currentBlockBytes)
+
+		nextHash = currentBlock.PrevBlockHash
+		//fmt.Printf("next hash %x:\n" ,nextHash)
+		return nil
+	})
+
+	if err != nil {
+		log.Panic(err)
+	}
+
+	return &BlockchainIterator{nextHash, bi.DB}
 }
 
 //新增区块
@@ -35,6 +68,7 @@ func (blockchain *Blockchain) AddBlock(data string) {
 
 	//2. update 数据库
 	err := blockchain.DB.Update(func(tx *bolt.Tx) error {
+
 		//2.1获取表
 		b := tx.Bucket([]byte(blocksBucket))
 		err := b.Put(newBlock.Hash, newBlock.Serialize())
@@ -54,6 +88,22 @@ func (blockchain *Blockchain) AddBlock(data string) {
 	if err != nil {
 		log.Panic(err)
 	}
+}
+
+//创取当前最新的区块
+func LastBlockchain() *Blockchain {
+	db, err := bolt.Open(dbFile, 0600, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+	var tip []byte
+
+	err = db.View(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte(blocksBucket))
+		tip = b.Get([]byte(TIP))
+		return nil
+	})
+	return &Blockchain{tip, db}
 }
 
 //创建一个带有创或区块的区块键
