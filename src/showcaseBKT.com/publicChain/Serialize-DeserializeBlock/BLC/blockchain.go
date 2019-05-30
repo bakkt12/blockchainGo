@@ -34,8 +34,6 @@ func (blockchain *Blockchain) AddBlock(data string) {
 	err := blockchain.DB.Update(func(tx *bolt.Tx) error {
 		//2.1获取表
 		b := tx.Bucket([]byte(blocksBucket))
-
-
 		err := b.Put(newBlock.Hash, newBlock.Serialize())
 		if err != nil {
 			log.Panic(err)
@@ -66,6 +64,7 @@ func NewBlockchain() *Blockchain {
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer db.Close()
 
 	//2 db.update更新数据
 	//2.1 表是否存在，如果不存在需要创建表

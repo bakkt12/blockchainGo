@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"kongyixueyuan.com/publicChain/Proof-of-work/BLC"
+	"showcaseBKT.com/publicChain/Proof-of-work/BLC"
 	"time"
 )
 
