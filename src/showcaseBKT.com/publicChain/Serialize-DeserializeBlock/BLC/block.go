@@ -53,7 +53,7 @@ func NewBlock(data string, prevBlockHash []byte) *Block {
 	block.Nonce = noce
 
 	isValid := pow.validate();
-	fmt.Println(isValid)
+	fmt.Printf("newBlock %c \n\n",isValid)
 
 	return block
 }

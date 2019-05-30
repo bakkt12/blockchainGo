@@ -42,7 +42,7 @@ func (pow *ProofOfWork) Run() (int, []byte) {
 	for nonce < maxNonce {
 		data := pow.prepareData(nonce)
 		hash = sha256.Sum256(data)
-		fmt.Printf("\r %x", hash)
+		fmt.Printf("\r Hash:%x", hash)
 		hashInt.SetBytes(hash[:])
 		//  hasint < pow .target -1
 		//  hasint = pow .target -1  0
@@ -53,8 +53,8 @@ func (pow *ProofOfWork) Run() (int, []byte) {
 			nonce++
 		}
 	}
+	fmt.Printf("  found nonce...%d   ",nonce)
 
-	fmt.Println("\n\n")
 	return nonce, hash[:];
 }
 
@@ -65,9 +65,9 @@ func NewProofOfWork(block *Block) *ProofOfWork {
 	00000001  =1
 	00100000  //移5位
 	 */
-	fmt.Printf("sart %b \n", target)
+//	fmt.Printf("sart %b \n", target)
 	target.Lsh(target, uint(256-targetBits))
-	fmt.Printf("after %b \n", target)
+//	fmt.Printf("after %b \n", target)
 
 	pow := &ProofOfWork{block, target}
 	return pow

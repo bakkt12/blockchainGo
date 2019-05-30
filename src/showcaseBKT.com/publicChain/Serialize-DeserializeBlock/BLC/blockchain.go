@@ -64,7 +64,7 @@ func NewBlockchain() *Blockchain {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer db.Close()
+	//defer db.Close()
 
 	//2 db.update更新数据
 	//2.1 表是否存在，如果不存在需要创建表
