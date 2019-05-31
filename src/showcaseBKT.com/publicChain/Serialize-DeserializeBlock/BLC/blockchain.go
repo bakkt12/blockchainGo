@@ -12,6 +12,9 @@ const dbFile = "blockchain.db"
 //表
 const blocksBucket = "blocks"
 
+//创世区块的数据信息
+const genesisCoinbaseData = "The times 03/Jan/2009 Chancellor on brink of second bailout for banks"
+
 const TIP = "L"
 
 type Blockchain struct {
@@ -32,7 +35,7 @@ func (blockchain *Blockchain) AddBlock(data string) {
 
 	//用数据库来存放整个区块
 	//1.创建区块
-	newBlock := NewBlock(data, blockchain.Tip)
+	/*newBlock := NewBlock(data, blockchain.Tip)
 
 	//2. update 数据库
 	err := blockchain.DB.Update(func(tx *bolt.Tx) error {
@@ -55,7 +58,7 @@ func (blockchain *Blockchain) AddBlock(data string) {
 
 	if err != nil {
 		log.Panic(err)
-	}
+	}*/
 }
 
 //创取当前最新的区块
@@ -97,7 +100,10 @@ func NewBlockchain() *Blockchain {
 		if b == nil {
 			fmt.Println(" No existing blockchain found. create a new one.")
 			//表不存认为区块为空，需要首次创建创世区块
-			genesisBlock := NewGenesisBlock()
+
+			//创建创世区块的交易对象
+			cbtx := NewCoinbaseTx("yhn", genesisCoinbaseData)
+			genesisBlock := NewGenesisBlock(cbtx)
 			//创建表
 			b, err = tx.CreateBucket([]byte(blocksBucket))
 			if err != nil {

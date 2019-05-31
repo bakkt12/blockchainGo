@@ -42,7 +42,7 @@ func (cli *CLI) printChain() {
 			//通过hash获取到区块字节数组
 			currentBlockBytes := b.Get([]byte(blockchainIterator.CurrentHash))
 			currentBlock := DeserializeBlock(currentBlockBytes)
-			fmt.Printf("Data:%s \n", currentBlock.Data)
+			//fmt.Printf("Data:%s \n", currentBlock.Transcation)
 			fmt.Printf("PrevBlockHash:%x \n", currentBlock.PrevBlockHash)
 			fmt.Printf("Hash:%x \n", currentBlock.Hash)
 			fmt.Printf("Nonce:%d \n", currentBlock.Nonce)

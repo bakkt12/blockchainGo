@@ -6,7 +6,6 @@ import (
 	"encoding/gob"
 	"fmt"
 	"log"
-	"strconv"
 	"time"
 )
 
@@ -16,14 +15,18 @@ type Block struct {
 	//上一个区块Hash
 	PrevBlockHash []byte
 	//交易数据
-	Data []byte
+	//旧逻辑 交易数据用Data []byte ->Transcation []Transcation
+	Transcation []*Transcation
 	//当前区块Hash
 	Hash []byte
 	//Nonce 随机数
 	Nonce int
+
+	//nBits int                // 块目标值
 }
 
-func (block *Block) SetHash() {
+//Not used!
+/*func (block *Block) SetHash() {
 	// 1. 时间转字节数组
 	//(1) init64转化为字符串  int64到string
 	timeString := strconv.FormatInt(block.Timestamp, 2)
@@ -35,13 +38,13 @@ func (block *Block) SetHash() {
 	hash := sha256.Sum256(headers)
 	//4.hash设置为当前 hash.
 	block.Hash = hash[:]
-}
+}*/
 
 /**
   产生新的区块工厂方法，
 */
-func NewBlock(data string, prevBlockHash []byte) *Block {
-	block := &Block{time.Now().Unix(), prevBlockHash, []byte(data), []byte{}, 0}
+func NewBlock(transcation []*Transcation, prevBlockHash []byte) *Block {
+	block := &Block{time.Now().Unix(), prevBlockHash, transcation, []byte{}, 0}
 	//将block作为参数 创建一个pow对象
 	pow := NewProofOfWork(block)
 
@@ -53,7 +56,7 @@ func NewBlock(data string, prevBlockHash []byte) *Block {
 	block.Nonce = noce
 
 	isValid := pow.validate();
-	fmt.Printf("newBlock %c \n\n",isValid)
+	fmt.Printf("newBlock %c \n\n", isValid)
 
 	return block
 }
@@ -70,6 +73,16 @@ func (b *Block) Serialize() []byte {
 	return result.Bytes()
 }
 
+//将区块里面所有的交易id拼接生成Hash
+func (b *Block) HashTranscation() []byte {
+	var txHashes [][]byte
+	for _, tx := range b.Transcation {
+		txHashes = append(txHashes, tx.ID)
+	}
+	txHash := sha256.Sum256(bytes.Join(txHashes, []byte{}))
+	return txHash[:]
+}
+
 //反序列化
 func DeserializeBlock(d []byte) *Block {
 	var block Block
@@ -82,6 +95,6 @@ func DeserializeBlock(d []byte) *Block {
 }
 
 //创建创世区块
-func NewGenesisBlock() *Block {
-	return NewBlock("Genenis Block", []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
+func NewGenesisBlock(conbase *Transcation) *Block {
+	return NewBlock([]*Transcation{conbase}, []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
 }

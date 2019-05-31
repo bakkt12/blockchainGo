@@ -24,7 +24,7 @@ func (pow *ProofOfWork) prepareData(nonce int) []byte {
 	data := bytes.Join(
 		[][]byte{
 			pow.block.PrevBlockHash,
-			pow.block.Data,
+			pow.block.HashTranscation(),
 			IntToHex(pow.block.Timestamp),
 			IntToHex(int64(targetBits)),
 			IntToHex(int64(nonce)),
@@ -34,10 +34,9 @@ func (pow *ProofOfWork) prepareData(nonce int) []byte {
 }
 
 func (pow *ProofOfWork) Run() (int, []byte) {
-	fmt.Printf("Mining the block containing \"%s\" \n ", pow.block.Data)
+	fmt.Printf("Start Mining the block .... \n ")
 	var hashInt big.Int
 	var hash [32]byte
-
 	nonce := 0;
 	for nonce < maxNonce {
 		data := pow.prepareData(nonce)
@@ -53,7 +52,7 @@ func (pow *ProofOfWork) Run() (int, []byte) {
 			nonce++
 		}
 	}
-	fmt.Printf("  found nonce...%d   ",nonce)
+	fmt.Printf("  found nonce...%d   ", nonce)
 
 	return nonce, hash[:];
 }
@@ -65,9 +64,9 @@ func NewProofOfWork(block *Block) *ProofOfWork {
 	00000001  =1
 	00100000  //移5位
 	 */
-//	fmt.Printf("sart %b \n", target)
+	//	fmt.Printf("sart %b \n", target)
 	target.Lsh(target, uint(256-targetBits))
-//	fmt.Printf("after %b \n", target)
+	//	fmt.Printf("after %b \n", target)
 
 	pow := &ProofOfWork{block, target}
 	return pow
