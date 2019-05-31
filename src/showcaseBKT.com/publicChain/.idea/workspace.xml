@@ -2,15 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0cb6de44-7942-4f36-b536-a98b4a67b72b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Serialize-DeserializeBlock/BLC/transcation.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Serialize-DeserializeBlock/BLC/block.go" beforeDir="false" afterPath="$PROJECT_DIR$/Serialize-DeserializeBlock/BLC/block.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Serialize-DeserializeBlock/BLC/blockchain.go" beforeDir="false" afterPath="$PROJECT_DIR$/Serialize-DeserializeBlock/BLC/blockchain.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Serialize-DeserializeBlock/BLC/cli.go" beforeDir="false" afterPath="$PROJECT_DIR$/Serialize-DeserializeBlock/BLC/cli.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Serialize-DeserializeBlock/BLC/proofOfWork.go" beforeDir="false" afterPath="$PROJECT_DIR$/Serialize-DeserializeBlock/BLC/proofOfWork.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Serialize-DeserializeBlock/blockchain.db" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Serialize-DeserializeBlock/blockchain.db.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Serialize-DeserializeBlock/main.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Serialize-DeserializeBlock/main.exe" beforeDir="false" afterPath="$PROJECT_DIR$/Serialize-DeserializeBlock/main.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Serialize-DeserializeBlock/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/Serialize-DeserializeBlock/main.go" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -111,12 +104,12 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="go" value="3728" />
+          <entry key="go" value="3732" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Go" value="3728" />
+          <entry key="Go" value="3732" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -167,8 +160,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Serialize-DeserializeBlock/main.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="209">
-              <caret line="62" column="21" selection-start-line="62" selection-start-column="21" selection-end-line="62" selection-end-column="21" />
+            <state relative-caret-position="179">
+              <caret line="53" column="10" lean-forward="true" selection-start-line="53" selection-start-column="10" selection-end-line="53" selection-end-column="10" />
               <folding>
                 <element signature="e#14#93#0" expanded="true" />
                 <element signature="e#683#688#0" />
@@ -192,8 +185,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Serialize-DeserializeBlock/BLC/cli.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-494">
-              <caret line="70" column="23" lean-forward="true" selection-start-line="70" selection-start-column="23" selection-end-line="70" selection-end-column="23" />
+            <state relative-caret-position="-465">
+              <caret line="70" column="16" selection-start-line="70" selection-start-column="16" selection-end-line="70" selection-end-column="16" />
               <folding>
                 <element signature="e#13#37#0" expanded="true" />
               </folding>
@@ -292,12 +285,12 @@
         <option value="$PROJECT_DIR$/BoltDB-View/main.go" />
         <option value="$PROJECT_DIR$/Serialize-DeserializeBlock/BLC/blockchainIterator.go" />
         <option value="$PROJECT_DIR$/Serialize-DeserializeBlock/BLC/utils.go" />
-        <option value="$PROJECT_DIR$/Serialize-DeserializeBlock/main.go" />
         <option value="$PROJECT_DIR$/Serialize-DeserializeBlock/BLC/block.go" />
         <option value="$PROJECT_DIR$/Serialize-DeserializeBlock/BLC/proofOfWork.go" />
         <option value="$PROJECT_DIR$/Serialize-DeserializeBlock/BLC/transcation.go" />
         <option value="$PROJECT_DIR$/Serialize-DeserializeBlock/BLC/blockchain.go" />
         <option value="$PROJECT_DIR$/Serialize-DeserializeBlock/BLC/cli.go" />
+        <option value="$PROJECT_DIR$/Serialize-DeserializeBlock/main.go" />
       </list>
     </option>
   </component>
@@ -308,10 +301,10 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="818" />
-    <option name="y" value="178" />
+    <option name="x" value="540" />
+    <option name="y" value="105" />
     <option name="width" value="1071" />
-    <option name="height" value="722" />
+    <option name="height" value="792" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -370,7 +363,7 @@
     <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file://C:/workspaceGo/GitRepo/blockchainGo/src/kongyixueyuan.com/publicChain/BoltDB-Create/main.go" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1559301581862" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1559302017189" />
     <property name="configurable.Global.GOPATH.is.expanded" value="true" />
     <property name="configurable.Module.GOPATH.is.expanded" value="false" />
     <property name="configurable.Project.GOPATH.is.expanded" value="true" />
@@ -483,7 +476,7 @@
       <workItem from="1557974640669" duration="3594000" />
       <workItem from="1558523768401" duration="18313000" />
       <workItem from="1559038780818" duration="15930000" />
-      <workItem from="1559185996821" duration="44992000" />
+      <workItem from="1559185996821" duration="45691000" />
     </task>
     <task id="LOCAL-00001" summary="commit">
       <created>1557714149016</created>
@@ -503,13 +496,12 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="178040000" />
+    <option name="totallyTimeSpent" value="178739000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="539" y="210" width="1071" height="722" extended-state="0" />
-    <editor active="true" />
+    <frame x="540" y="105" width="1071" height="792" extended-state="0" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22551928" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1909001" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -524,8 +516,8 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.7161226" visible="true" weight="0.22920203" />
-      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.28387734" side_tool="true" visible="true" weight="0.22920203" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="8" sideWeight="0.7141444" visible="true" weight="0.4430956" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.2858556" side_tool="true" visible="true" weight="0.4430956" />
       <window_info anchor="bottom" id="Version Control" order="10" show_stripe_button="false" />
       <window_info anchor="bottom" id="Messages" order="11" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -772,17 +764,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Serialize-DeserializeBlock/main.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="209">
-          <caret line="62" column="21" selection-start-line="62" selection-start-column="21" selection-end-line="62" selection-end-column="21" />
-          <folding>
-            <element signature="e#14#93#0" expanded="true" />
-            <element signature="e#683#688#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Serialize-DeserializeBlock/BLC/proofOfWork.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="132">
@@ -823,10 +804,21 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Serialize-DeserializeBlock/main.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="179">
+          <caret line="53" column="10" lean-forward="true" selection-start-line="53" selection-start-column="10" selection-end-line="53" selection-end-column="10" />
+          <folding>
+            <element signature="e#14#93#0" expanded="true" />
+            <element signature="e#683#688#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Serialize-DeserializeBlock/BLC/cli.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-494">
-          <caret line="70" column="23" lean-forward="true" selection-start-line="70" selection-start-column="23" selection-end-line="70" selection-end-column="23" />
+        <state relative-caret-position="-465">
+          <caret line="70" column="16" selection-start-line="70" selection-start-column="16" selection-end-line="70" selection-end-column="16" />
           <folding>
             <element signature="e#13#37#0" expanded="true" />
           </folding>

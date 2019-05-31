@@ -54,13 +54,8 @@ func  cli()  {
 	cli.Run()
 }
 func main() {
-	//cli()
-
-	var a [][]string
-
-	a = append(a,[]string{"sss"})
-
-	fmt.Printf("%s",a)
+	AddBlock()
+	cli()
 }
 
 
