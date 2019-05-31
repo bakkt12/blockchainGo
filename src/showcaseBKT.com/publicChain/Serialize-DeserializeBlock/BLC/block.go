@@ -25,7 +25,7 @@ type Block struct {
 
 func (block *Block) SetHash() {
 	// 1. 时间转字节数组
-	//(1) init64转化为字符串
+	//(1) init64转化为字符串  int64到string
 	timeString := strconv.FormatInt(block.Timestamp, 2)
 	//（2）字符串转化为字节数组
 	timestamp := []byte(timeString)
