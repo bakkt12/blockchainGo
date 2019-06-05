@@ -49,7 +49,7 @@ func (cli *CLI) printChain() {
 			fmt.Printf("Nonce			:%d \n", currentBlock.Nonce)
 			fmt.Printf("Timestamp		:%s \n", time.Unix(currentBlock.Timestamp, 0).Format("2006-01-02 15:04:05"))
 			for _, tx := range currentBlock.Transcation{
-				fmt.Printf("txid			:%x \n", tx.ID)
+
 				fmt.Println("\t----------------------")
 				tx.printfTranscation()
 				fmt.Println("\t----------------------")
@@ -78,12 +78,11 @@ func (cli *CLI) sendToken() {
 
 	//1.新建一个交易
 	var txs []*Transcation
-	tx1 := NewUTXOTransaction("yhn", "BEN", 5, cli.BC)
+	tx1 := NewUTXOTransaction("yhn", "BAKKT", 15, cli.BC)
+	//tx2 := NewUTXOTransaction("yhn", "YE", 13, cli.BC)
 	txs = append(txs,tx1)
 	cli.BC.MineBlock(txs)
-	tx2 := NewUTXOTransaction("yhn", "YE", 13, cli.BC)
-	txs = append(txs,tx2)
-	cli.BC.MineBlock(txs)
+
 	//tx3 := NewUTXOTransaction("yhn", "BEST_GIGI", 2, cli.BC)
 }
 
