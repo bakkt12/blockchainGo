@@ -1,9 +1,12 @@
 package BLC
 
 import (
+	"encoding/hex"
 	"fmt"
 	"github.com/boltdb/bolt"
 	"log"
+	"math/big"
+	"time"
 )
 
 //数据库名
@@ -21,6 +24,114 @@ type Blockchain struct {
 	//Blocks []*Block //存储有序的区块
 	Tip []byte   //区块键里最后一个区块的Hash
 	DB  *bolt.DB //数据库
+}
+
+/**
+找到包含当前用户未花费的输出的所有交易集合
+返回交易数组集
+ */
+func (bc *Blockchain) FindUnspentTranscations(address string) [] Transcation {
+
+	//存储未花费输出的交易
+	var unspentTXs []Transcation
+
+	//key:transcation id- output index
+	//存储交易所对应已花费的(vinput里的)对应的output的index
+	spentTXOs := make(map[string][]int)
+
+	blockchainIterator := bc.Iterator()
+
+	var hashBigInt big.Int
+	fmt.Println("========FindUnspentTranscations=============")
+	for {
+		err := blockchainIterator.DB.View(func(tx *bolt.Tx) error {
+			b := tx.Bucket([]byte(blocksBucket))
+			//通过hash获取到区块字节数组
+			currentBlockBytes := b.Get([]byte(blockchainIterator.CurrentHash))
+			currentBlock := DeserializeBlock(currentBlockBytes)
+
+			fmt.Printf("PrevBlockHash:%x \n", currentBlock.PrevBlockHash)
+			fmt.Printf("Hash:%x \n", currentBlock.Hash)
+			fmt.Printf("Nonce:%d \n", currentBlock.Nonce)
+			fmt.Printf("Timestamp:%s \n\n", time.Unix(currentBlock.Timestamp, 0).Format("2006-01-02 15:04:05"))
+			for _, transcation := range currentBlock.Transcation {
+				fmt.Printf("TranscationHash %x \n", transcation.ID)
+
+				//将transcation id(byte array) 转成string
+				txId := hex.EncodeToString(transcation.ID)
+
+			Outputs:
+				for outIdx, out := range transcation.Vout {
+					//是否已经被花费
+					/**
+					  比特币应用可以使用一些策略来满足付款需要：组合若干小的个体，算出准确的找零；或者使用一个比交易值大的个体然后进行找零。
+					   vout是否在区块的 vint中
+					 */
+					if spentTXOs[txId] != nil {
+						for _, spentOut := range spentTXOs[txId] {
+							if spentOut == outIdx {
+								//终止当前for循环 ，从Outputs标签处for继续执行
+								//GO的 continue只是停止执行continue之后的语句，但会继续在当前for中执行
+								continue Outputs
+							}
+						} //end for
+					}
+
+					if out.CanBeUnlockedWith(address) {
+						unspentTXs = append(unspentTXs, *transcation)
+					}
+				} //end for Vout
+
+				if transcation.IsCoinbase() == false {
+					for _, in := range transcation.Vin {
+						if in.CanUnlockOutputWith(address) {
+							inTxId := hex.EncodeToString(in.Txid)
+							spentTXOs[inTxId] = append(spentTXOs[inTxId], in.VoutIndex)
+						}
+					}
+				}
+			} //end for transcation
+			return nil
+		})
+		if err != nil {
+			log.Panic(err)
+		}
+		//获取下一个迭代器
+		blockchainIterator = blockchainIterator.Next()
+
+		//是否到达创世区块
+		hashBigInt.SetBytes(blockchainIterator.CurrentHash)
+		if (hashBigInt.Cmp(big.NewInt(0)) == 0) {
+			break;
+		}
+	} //end for
+	return unspentTXs
+}
+
+//查找可用的未消费的输出信息
+func (bc *Blockchain) FindSpendableOutputs(address string, amount int) (int, map[string][]int) {
+	//{"1111":[1,2,3]}
+	//交易id对应未消费的txoutput的index
+	unspentOutputs := make(map[string][]int)
+	//查看未花费
+	unspentTXs := bc.FindUnspentTranscations(address)
+	accumulated := 0 //统计【unspentOutputs】对应的txoutput未花费总量
+
+Work:
+	for _, tx := range unspentTXs {
+		txId := hex.EncodeToString(tx.ID)
+		for index, out := range tx.Vout {
+			if out.CanBeUnlockedWith(address) && accumulated < amount {
+				accumulated += out.CAmount
+				unspentOutputs[txId] = append(unspentOutputs[txId], index)
+				if accumulated >= amount {
+					break Work
+				}
+			}
+		} //end for
+	} //end for
+
+	return accumulated, unspentOutputs
 }
 
 //新增区块

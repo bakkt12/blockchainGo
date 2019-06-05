@@ -39,23 +39,22 @@ func BlockIteraor() {
 
 		hashInt.SetBytes(blockchainIterator.CurrentHash)
 
-		if( hashInt .Cmp(big.NewInt(0))==0) {
-			fmt.Printf("%x \n",blockchainIterator.CurrentHash)
+		if (hashInt.Cmp(big.NewInt(0)) == 0) {
+			fmt.Printf("%x \n", blockchainIterator.CurrentHash)
 			break;
 		}
 	}
 }
 
-func  cli()  {
-	blockchain:= BLC.NewBlockchain()
+func cli() {
+	blockchain := BLC.NewBlockchain()
 
-	cli:= BLC.CLI{blockchain}
+	cli := BLC.CLI{blockchain}
 
 	cli.Run()
 }
 func main() {
-	AddBlock()
+	//AddBlock()
 	cli()
+
 }
-
-

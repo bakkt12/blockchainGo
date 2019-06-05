@@ -67,6 +67,10 @@ func (cli *CLI) printChain() {
 
 func (cli *CLI) addBlock(data string) {
 	cli.BC.AddBlock(data)
+	fmt.Println(cli.BC.FindUnspentTranscations(data))
+	count,outputMap:=cli.BC.FindSpendableOutputs(data,1)
+	fmt.Printf(" address:%s,amount %d:\n",data,count)
+	fmt.Println(outputMap)
 }
 func (cli *CLI) Run() {
 	//判断终端参数的个数 如果没有参数直接打印usage信息
