@@ -19,7 +19,7 @@ func (cli *CLI) printUsage() {
 	fmt.Println("")
 	fmt.Println("Usage:")
 	fmt.Println("\taddblock -data BLOCK_DATA - add a block")
-	fmt.Println("\tprintchain -print all the blocks of the blockchain")
+	fmt.Println("\tprintf -print all the blocks of the blockchain")
 }
 
 //判断终端参数的个
@@ -43,11 +43,19 @@ func (cli *CLI) printChain() {
 			currentBlockBytes := b.Get([]byte(blockchainIterator.CurrentHash))
 			currentBlock := DeserializeBlock(currentBlockBytes)
 			//fmt.Printf("Data:%s \n", currentBlock.Transcation)
+			fmt.Println("============START==============================")
 			fmt.Printf("PrevBlockHash:%x \n", currentBlock.PrevBlockHash)
-			fmt.Printf("Hash:%x \n", currentBlock.Hash)
-			fmt.Printf("Nonce:%d \n", currentBlock.Nonce)
-			fmt.Printf("Timestamp:%s \n\n", time.Unix(currentBlock.Timestamp, 0).Format("2006-01-02 15:04:05"))
-
+			fmt.Printf("Hash			:%x \n", currentBlock.Hash)
+			fmt.Printf("Nonce			:%d \n", currentBlock.Nonce)
+			fmt.Printf("Timestamp		:%s \n", time.Unix(currentBlock.Timestamp, 0).Format("2006-01-02 15:04:05"))
+			for _, tx := range currentBlock.Transcation{
+				fmt.Printf("txid			:%x \n", tx.ID)
+				fmt.Println("\t----------------------")
+				tx.printfTranscation()
+				fmt.Println("\t----------------------")
+			}
+			fmt.Println("===========END===============================")
+			fmt.Println("")
 			return nil
 		})
 		if err != nil {
@@ -61,23 +69,33 @@ func (cli *CLI) printChain() {
 		if (hashBigInt.Cmp(big.NewInt(0)) == 0) {
 			break;
 		}
-
 	}
 }
 
+func (cli *CLI) sendToken() {
+	//1 .3->yjc
+	//   3->bakkt
+
+	//1.新建一个交易
+	var txs []*Transcation
+	tx1 := NewUTXOTransaction("yhn", "BEN", 5, cli.BC)
+	txs = append(txs,tx1)
+	cli.BC.MineBlock(txs)
+	tx2 := NewUTXOTransaction("yhn", "YE", 13, cli.BC)
+	txs = append(txs,tx2)
+	cli.BC.MineBlock(txs)
+	//tx3 := NewUTXOTransaction("yhn", "BEST_GIGI", 2, cli.BC)
+}
+
 func (cli *CLI) addBlock(data string) {
-	cli.BC.AddBlock(data)
-	fmt.Println(cli.BC.FindUnspentTranscations(data))
-	count,outputMap:=cli.BC.FindSpendableOutputs(data,1)
-	fmt.Printf(" address:%s,amount %d:\n",data,count)
-	fmt.Println(outputMap)
+	cli.sendToken();
 }
 func (cli *CLI) Run() {
 	//判断终端参数的个数 如果没有参数直接打印usage信息
 	cli.validateArgs()
 
 	addBlockCmd := flag.NewFlagSet("addblock", flag.ExitOnError)
-	printChainCmd := flag.NewFlagSet("printchain", flag.ExitOnError)
+	printChainCmd := flag.NewFlagSet("printf", flag.ExitOnError)
 
 	addBlockData := addBlockCmd.String("data", "", "Block")
 
@@ -89,7 +107,7 @@ func (cli *CLI) Run() {
 			log.Panic(err)
 		}
 
-	case "printchain":
+	case "printf":
 		err := printChainCmd.Parse(os.Args[2:])
 		if err != nil {
 			log.Panic(err)

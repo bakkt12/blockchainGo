@@ -6,7 +6,6 @@ import (
 	"github.com/boltdb/bolt"
 	"log"
 	"math/big"
-	"time"
 )
 
 //数据库名
@@ -42,7 +41,7 @@ func (bc *Blockchain) FindUnspentTranscations(address string) [] Transcation {
 	blockchainIterator := bc.Iterator()
 
 	var hashBigInt big.Int
-	fmt.Println("========FindUnspentTranscations=============")
+	//fmt.Println("========FindUnspentTranscations=============")
 	for {
 		err := blockchainIterator.DB.View(func(tx *bolt.Tx) error {
 			b := tx.Bucket([]byte(blocksBucket))
@@ -50,12 +49,12 @@ func (bc *Blockchain) FindUnspentTranscations(address string) [] Transcation {
 			currentBlockBytes := b.Get([]byte(blockchainIterator.CurrentHash))
 			currentBlock := DeserializeBlock(currentBlockBytes)
 
-			fmt.Printf("PrevBlockHash:%x \n", currentBlock.PrevBlockHash)
-			fmt.Printf("Hash:%x \n", currentBlock.Hash)
-			fmt.Printf("Nonce:%d \n", currentBlock.Nonce)
-			fmt.Printf("Timestamp:%s \n\n", time.Unix(currentBlock.Timestamp, 0).Format("2006-01-02 15:04:05"))
+			//fmt.Printf("PrevBlockHash:%x \n", currentBlock.PrevBlockHash)
+			//fmt.Printf("Hash:%x \n", currentBlock.Hash)
+			//fmt.Printf("Nonce:%d \n", currentBlock.Nonce)
+			//fmt.Printf("Timestamp:%s \n\n", time.Unix(currentBlock.Timestamp, 0).Format("2006-01-02 15:04:05"))
 			for _, transcation := range currentBlock.Transcation {
-				fmt.Printf("TranscationHash %x \n", transcation.ID)
+				//fmt.Printf("TranscationHash %x \n", transcation.ID)
 
 				//将transcation id(byte array) 转成string
 				txId := hex.EncodeToString(transcation.ID)
@@ -135,8 +134,10 @@ Work:
 }
 
 //新增区块
-func (blockchain *Blockchain) AddBlock(data string) {
+////打包新的区块
+func (blockchain *Blockchain) MineBlock(txs []*Transcation) {
 	/*##################旧逻辑#############################################**/
+	//不再使用
 	//1.创新区块
 	//preBlock := blockchain.Blocks[len(blockchain.Blocks)-1]
 	//newBlock := NewBlock(data, preBlock.Hash)
@@ -146,7 +147,7 @@ func (blockchain *Blockchain) AddBlock(data string) {
 
 	//用数据库来存放整个区块
 	//1.创建区块
-	/*newBlock := NewBlock(data, blockchain.Tip)
+	newBlock := NewBlock(txs, blockchain.Tip)
 
 	//2. update 数据库
 	err := blockchain.DB.Update(func(tx *bolt.Tx) error {
@@ -169,7 +170,7 @@ func (blockchain *Blockchain) AddBlock(data string) {
 
 	if err != nil {
 		log.Panic(err)
-	}*/
+	}
 }
 
 //创取当前最新的区块

@@ -51,6 +51,22 @@ func (tx *Transcation) IsCoinbase() bool {
 	return len(tx.Vin) == 1 && tx.Vin[0].VoutIndex == -1 && len(tx.Vin[0].Txid) == 0
 }
 
+func (transcation *Transcation) printfTranscation() {
+
+	//fmt.Println("\t-------vinput----------")
+	for _, in := range transcation.Vin {
+		fmt.Printf("\tvin txid        :%x\n", in.Txid)
+		fmt.Printf("\tvin voutIndex   :%d\n", in.VoutIndex)
+		fmt.Printf("\tvin ScriptPubKey:%s\n", in.ScriptPubKey)
+	}
+//	fmt.Println("\t--------vout---------")
+	for _, out := range transcation.Vout {
+		fmt.Printf("\tvout amount      :%d\n", out.CAmount)
+		fmt.Printf("\tvout ScriptPubKey:%s\n", out.ScriptPubKey)
+	}
+
+}
+
 //创建一个新的coinbase交易
 func NewCoinbaseTx(to, data string) *Transcation {
 	if data == "" {
@@ -68,6 +84,8 @@ func NewCoinbaseTx(to, data string) *Transcation {
 
 //建立交易
 func NewUTXOTransaction(from, to string, amount int, bc *Blockchain) *Transcation {
+
+	fmt.Printf("Create a new UTXOTransaction..from:%s->to:%s \n", from, to)
 	//输入
 	var inputs []TXInput
 	//输出
@@ -76,7 +94,9 @@ func NewUTXOTransaction(from, to string, amount int, bc *Blockchain) *Transcatio
 	//1.找到有效的可用的交易输出数据模型
 	//查询出未花费的输出  (int,map[string][]int)
 	acc, validOutputs := bc.FindSpendableOutputs(from, amount)
+
 	if acc < amount {
+		fmt.Printf("acc:%d  amount:%d \n",acc,amount)
 		log.Panic("ERROR; Not enough funds!")
 	}
 	for txid, outs := range validOutputs {
@@ -97,7 +117,7 @@ func NewUTXOTransaction(from, to string, amount int, bc *Blockchain) *Transcatio
 	outputs = append(outputs, output)
 	//建立输出，找零
 	output = TXOutput{acc - amount, from}
-	outputs = append(outputs, output)
+//	outputs = append(outputs, output)
 
 	//创建交易
 	tx := Transcation{nil, inputs, outputs}

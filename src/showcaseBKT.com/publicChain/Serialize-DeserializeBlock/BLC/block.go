@@ -43,7 +43,8 @@ type Block struct {
 /**
   产生新的区块工厂方法，
 */
-func NewBlock(transcation []*Transcation, prevBlockHash []byte) *Block {
+func
+NewBlock(transcation []*Transcation, prevBlockHash []byte) *Block {
 	block := &Block{time.Now().Unix(), prevBlockHash, transcation, []byte{}, 0}
 	//将block作为参数 创建一个pow对象
 	pow := NewProofOfWork(block)
