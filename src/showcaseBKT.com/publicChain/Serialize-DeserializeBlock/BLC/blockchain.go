@@ -29,7 +29,7 @@ type Blockchain struct {
 找到包含当前用户未花费的输出的所有交易集合
 返回交易数组集
  */
-func (bc *Blockchain) FindUnspentTranscations(address string) [] Transcation {
+func (bc *Blockchain) FindUnspentTranscations(address string,noPackageTxs []*Transcation) [] Transcation {
 
 	//存储未花费输出的交易
 	var unspentTXs []Transcation
@@ -42,6 +42,9 @@ func (bc *Blockchain) FindUnspentTranscations(address string) [] Transcation {
 
 	var hashBigInt big.Int
 	//fmt.Println("========FindUnspentTranscations=============")
+	for _,tx:=range noPackageTxs{
+		unspentTXs = append(unspentTXs,*tx)
+	}
 	for {
 		err := blockchainIterator.DB.View(func(tx *bolt.Tx) error {
 			b := tx.Bucket([]byte(blocksBucket))
@@ -108,12 +111,12 @@ func (bc *Blockchain) FindUnspentTranscations(address string) [] Transcation {
 }
 
 //查找可用的未消费的输出信息
-func (bc *Blockchain) FindSpendableOutputs(address string, amount int) (int, map[string][]int) {
+func (bc *Blockchain) FindSpendableOutputs(address string, amount int,noPackageTxs []*Transcation) (int, map[string][]int) {
 	//{"1111":[1,2,3]}
 	//交易id对应未消费的txoutput的index
 	unspentOutputs := make(map[string][]int)
 	//查看未花费
-	unspentTXs := bc.FindUnspentTranscations(address)
+	unspentTXs := bc.FindUnspentTranscations(address,noPackageTxs)
 	accumulated := 0 //统计【unspentOutputs】对应的txoutput未花费总量
 
 Work:

@@ -85,9 +85,14 @@ func NewCoinbaseTx(to, data string) *Transcation {
 }
 
 //建立交易
-func NewUTXOTransaction(from, to string, amount int, bc *Blockchain) *Transcation {
+func NewUTXOTransaction(from, to string, amount int, bc *Blockchain,noPackageTxs []*Transcation) *Transcation {
 
 	fmt.Printf("Create a new UTXOTransaction..from:%s->to:%s \n", from, to)
+	fmt.Println("start printf noPackageTxs")
+	for _,tx := range  noPackageTxs{
+		tx.printfTranscation()
+	}
+	fmt.Println("end printf noPackageTxs")
 	//输入
 	var inputs []TXInput
 	//输出
@@ -95,7 +100,7 @@ func NewUTXOTransaction(from, to string, amount int, bc *Blockchain) *Transcatio
 
 	//1.找到有效的可用的交易输出数据模型
 	//查询出未花费的输出  (int,map[string][]int)
-	acc, validOutputs := bc.FindSpendableOutputs(from, amount)
+	acc, validOutputs := bc.FindSpendableOutputs(from, amount,noPackageTxs)
 
 	if acc < amount {
 		fmt.Printf("acc:%d  amount:%d \n",acc,amount)

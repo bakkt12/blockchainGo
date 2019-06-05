@@ -77,13 +77,17 @@ func (cli *CLI) sendToken() {
 	//   3->bakkt
 
 	//1.新建一个交易
-	var txs []*Transcation
-	tx1 := NewUTXOTransaction("yhn", "BAKKT", 15, cli.BC)
-	//tx2 := NewUTXOTransaction("yhn", "YE", 13, cli.BC)
-	txs = append(txs,tx1)
-	cli.BC.MineBlock(txs)
+	var noPackageTxs []*Transcation
+	tx1 := NewUTXOTransaction("yhn", "BAKKT", 15, cli.BC, noPackageTxs)
 
-	//tx3 := NewUTXOTransaction("yhn", "BEST_GIGI", 2, cli.BC)
+	noPackageTxs = append(noPackageTxs,tx1)
+	tx2 := NewUTXOTransaction("yhn", "YE", 13, cli.BC, noPackageTxs)
+
+	noPackageTxs = append(noPackageTxs,tx2)
+	//tx3 := NewUTXOTransaction("yhn", "LY", 5, cli.BC, noPackageTxs)
+
+	//cli.BC.MineBlock([]*Transcation{tx1,tx2,tx3})
+
 }
 
 func (cli *CLI) addBlock(data string) {
