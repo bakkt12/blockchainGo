@@ -88,11 +88,11 @@ func NewCoinbaseTx(to, data string) *Transcation {
 func NewUTXOTransaction(from, to string, amount int, bc *Blockchain,noPackageTxs []*Transcation) *Transcation {
 
 	fmt.Printf("Create a new UTXOTransaction..from:%s->to:%s \n", from, to)
-	fmt.Println("start printf noPackageTxs")
-	for _,tx := range  noPackageTxs{
-		tx.printfTranscation()
-	}
-	fmt.Println("end printf noPackageTxs")
+	//fmt.Println("start printf noPackageTxs")
+	//for _,tx := range  noPackageTxs{
+	//	tx.printfTranscation()
+	//}
+	//fmt.Println("end printf noPackageTxs")
 	//输入
 	var inputs []TXInput
 	//输出

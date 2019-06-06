@@ -8,7 +8,7 @@ import (
 	"math/big"
 )
 
-const targetBits = 20
+const targetBits = 19
 
 var (
 	//定义最大

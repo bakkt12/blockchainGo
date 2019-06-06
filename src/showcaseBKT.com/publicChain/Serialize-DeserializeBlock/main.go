@@ -6,7 +6,6 @@ import (
 	"showcaseBKT.com/publicChain/Serialize-DeserializeBlock/BLC"
 )
 
-
 func BlockIteraor() {
 	blockchain := BLC.LastBlockchain()
 	var blockchainIterator *BLC.BlockchainIterator
@@ -27,11 +26,19 @@ func BlockIteraor() {
 	}
 }
 
-func cli() {
-	blockchain := BLC.NewBlockchain()
-	cli := BLC.CLI{blockchain}
-	cli.Run()
-}
+//func cli() {
+//	blockchain := BLC.NewBlockchain()
+//	cli := BLC.CLI{blockchain}
+//	cli.Run()
+//}
+//
+//func printfBlock() {
+//	blockchain := BLC.NewBlockchain()
+//	cli := BLC.CLI{blockchain}
+//	cli.PrintChain()
+//}
+
 func main() {
-	cli()
+	cli := BLC.CLI{}
+	cli.Run()
 }
