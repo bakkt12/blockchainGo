@@ -3,13 +3,14 @@ package BLC
 import (
 	"bytes"
 	"encoding/binary"
+	"encoding/json"
 	"errors"
 	"log"
 	"regexp"
 )
 
 const (
-	SIMPLE  = "2006-01-02 15:04:05"
+	SIMPLE      = "2006-01-02 15:04:05"
 	ANSIC       = "Mon Jan _2 15:04:05 2006"
 	UnixDate    = "Mon Jan _2 15:04:05 MST 2006"
 	RubyDate    = "Mon Jan 02 15:04:05 -0700 2006"
@@ -124,4 +125,12 @@ func BinaryStringToBytes(s string) (bs []byte) {
 		}
 	}
 	return
+}
+ //string转
+func JSONtoArray(jsonstr string) [] string {
+	var array []string
+	if err := json.Unmarshal([]byte(jsonstr), &array); err != nil {
+		log.Panic(err)
+	}
+	return array
 }

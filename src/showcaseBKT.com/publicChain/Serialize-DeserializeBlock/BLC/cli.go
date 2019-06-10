@@ -161,11 +161,20 @@ func (cli *CLI) Run() {
 	}
 
 	if sendCmd.Parsed() {
+		fmt.Printf("from:%s, to:%s,amount %s \n", *sendFrom, *sendTo, *sendAmount)
 		if *sendFrom == "" || *sendTo == "" || *sendAmount == "" {
+			fmt.Println("null---")
 			cli.printUsage()
 			os.Exit(1)
 		}
-		fmt.Printf("from:%6s, to:%6s,admount %6s \n", *sendFrom, *sendTo, *sendAmount)
+		fmt.Println("json ->array[]")
+		fromAddress:=JSONtoArray(*sendFrom)
+		toAddress:=JSONtoArray(*sendTo)
+		sendAmount:=JSONtoArray(*sendAmount)
+
+		fmt.Printf("from %s\n",fromAddress)
+		fmt.Println("to: %s\n",toAddress)
+		fmt.Println("amount %s\n",sendAmount)
 	}
 
 	if printChainCmd.Parsed() {
