@@ -39,6 +39,21 @@ func BlockIteraor() {
 //}
 
 func main() {
-	cli := BLC.CLI{}
+	blockchain := BLC.NewBlockchain()
+	cli := BLC.CLI{blockchain}
 	cli.Run()
+	//spentTXOs := make(map[string][]string)
+	//for k, v := range spentTXOs {
+	//	fmt.Printf("index %s,%d, \n", k, v)
+	//}
+	//nubmers := [] int{1, 2, 3, 4, 5, 6, 7, 8, 10, 1, 2, 3, 4, 5,6,6}
+	//for index, x := range nubmers {
+	//	vString :=strconv.Itoa(x)
+	//	fmt.Printf("第 %d 位 x 的值 = %d ,v: %s\n", index,x ,vString )
+	//	spentTXOs[vString ] = append(spentTXOs[vString ], vString )
+	//}
+	//
+	//for k, v := range spentTXOs {
+	//	fmt.Printf("index %s,%s, \n", k, v)
+	//}
 }

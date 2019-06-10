@@ -55,14 +55,14 @@ func (transcation *Transcation) printfTranscation() {
 
 	fmt.Printf("\t ####txid:		%x\n", transcation.ID)
 	for _, in := range transcation.Vin {
-		fmt.Println("\t-------vinput----------")
+		fmt.Println("\t-------vinput:")
 		fmt.Printf("\tvin txid        :%x\n", in.Txid)
 		fmt.Printf("\tvin voutIndex   :%d\n", in.VoutIndex)
 		fmt.Printf("\tvin ScriptPubKey:%s\n", in.ScriptPubKey)
 	}
 //	fmt.Println("")
 	for _, out := range transcation.Vout {
-		fmt.Println("\t--------vout---------")
+		fmt.Println("\t--------vout:")
 		fmt.Printf("\tvout amount      :%d\n", out.CAmount)
 		fmt.Printf("\tvout ScriptPubKey:%s\n", out.ScriptPubKey)
 	}
