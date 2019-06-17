@@ -10,7 +10,7 @@ import (
 )
 
 type CLI struct {
-	BC *Blockchain
+	//BC *Blockchain
 }
 
 //判断终端参数的个
@@ -22,6 +22,9 @@ func (cli *CLI) validateArgs() {
 }
 
 func (cli *CLI) PrintChain() {
+	blockchian:= GetBlockchain();
+
+	defer blockchian.DB.Close()
 
 	//检查是否有数据存在
 	existDB := dbExists()
@@ -36,7 +39,7 @@ func (cli *CLI) PrintChain() {
 		return
 	}
 	var blockchainIterator *BlockchainIterator
-	blockchainIterator = cli.BC.Iterator()
+	blockchainIterator = blockchian.Iterator()
 	var hashBigInt big.Int
 	fmt.Println("")
 	for {
@@ -157,24 +160,24 @@ func (cli *CLI) Run() {
 			cli.printUsage()
 			os.Exit(1)
 		}
-		cli.addBlock("")
+		cli.crateBlockchain(*genenisAddress)
 	}
 
 	if sendCmd.Parsed() {
 		fmt.Printf("from:%s, to:%s,amount %s \n", *sendFrom, *sendTo, *sendAmount)
 		if *sendFrom == "" || *sendTo == "" || *sendAmount == "" {
-			fmt.Println("null---")
+			//fmt.Println("null---")
 			cli.printUsage()
 			os.Exit(1)
 		}
-		fmt.Println("json ->array[]")
+		//fmt.Println("json ->array[]")
 		fromAddress:=JSONtoArray(*sendFrom)
 		toAddress:=JSONtoArray(*sendTo)
 		sendAmount:=JSONtoArray(*sendAmount)
 
 		fmt.Printf("from %s\n",fromAddress)
-		fmt.Println("to: %s\n",toAddress)
-		fmt.Println("amount %s\n",sendAmount)
+		fmt.Printf("to: %s\n",toAddress)
+		fmt.Printf("amount: %s\n",sendAmount)
 	}
 
 	if printChainCmd.Parsed() {
@@ -188,5 +191,12 @@ func (cli *CLI) Run() {
 		}
 		fmt.Printf("查询%s 的余额", balanceAddress)
 	}
-
+}
+//创建创世区块
+func (cli *CLI) crateBlockchain(genesis string)  {
+	if dbExists() {
+		fmt.Println("创世区块已经存在")
+		os.Exit(1)
+	}
+	CrateGenesisBlockchain(genesis)
 }

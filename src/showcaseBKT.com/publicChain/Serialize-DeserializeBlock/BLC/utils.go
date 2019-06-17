@@ -126,11 +126,37 @@ func BinaryStringToBytes(s string) (bs []byte) {
 	}
 	return
 }
- //string转
+func  ArrayToJSON(arr []string) []byte{
+
+	lang,err :=json.Marshal(arr)
+	if err!=nil{
+		log.Panic(err)
+	}
+	//fmt.Println("=========array-> json")
+	//fmt.Println(string(lang))
+	return lang
+}
+
+/**
+	//arr := [] string{"hello", "apple", "java", "golang"}
+	//lang := BLC.ArrayToJSON(arr)
+	//fmt.Println(string(lang))
+	//str1:= "[\"helloggggggggg\",\"apple\",\"java\",\"golang\"]";
+	//wo := BLC.JSONtoArray(string(str1))
+	//fmt.Println(wo)
+ */
+
+ //string转joson
 func JSONtoArray(jsonstr string) [] string {
 	var array []string
 	if err := json.Unmarshal([]byte(jsonstr), &array); err != nil {
 		log.Panic(err)
 	}
+
+	//fmt.Println("====json -> []string")
+	//fmt.Println(array)
+
 	return array
 }
+
+

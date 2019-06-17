@@ -221,9 +221,31 @@ func LastBlockchain() *Blockchain {
 	return &Blockchain{tip, db}
 }
 
-//创建一个带有创或区块的区块键
-func NewBlockchain() *Blockchain {
+func GetBlockchain() *Blockchain {
+	if dbExists() == false {
+		fmt.Println("Blcokchain不存在")
+		log.Panic("Blcokchain不存在")
+	}
 
+	//1.尝试打开或是创建数据库
+	db, err := bolt.Open(dbFile, 0600, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+	//2.读取最未尾的区块
+	var tip []byte
+	err = db.View(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte(blocksBucket))
+		tip = b.Get([]byte(TIP))
+		return nil
+	})
+
+	return &Blockchain{tip, db}
+}
+
+//创建一个带有创或区块的区块键
+func CrateGenesisBlockchain(genesisAddress string) {
+	dbExists()
 	var tip [] byte //获取最后一个区块hash
 	//return &Blockchain{[]*Block{NewGenesisBlock()}}
 	//1.尝试打开或是创建数据库
@@ -232,7 +254,8 @@ func NewBlockchain() *Blockchain {
 	if err != nil {
 		log.Fatal(err)
 	}
-	//defer db.Close()
+
+	defer db.Close()
 
 	//2 db.update更新数据
 	//2.1 表是否存在，如果不存在需要创建表
@@ -246,7 +269,7 @@ func NewBlockchain() *Blockchain {
 			//表不存认为区块为空，需要首次创建创世区块
 
 			//创建创世区块的交易对象
-			cbtx := NewCoinbaseTx("yhn", genesisCoinbaseData)
+			cbtx := NewCoinbaseTx(genesisAddress, genesisCoinbaseData)
 			genesisBlock := NewGenesisBlock(cbtx)
 			//创建表
 			b, err = tx.CreateBucket([]byte(blocksBucket))
@@ -280,7 +303,7 @@ func NewBlockchain() *Blockchain {
 	//2.3 创世区块的hash作为key block序列化数据做为value 存在表中
 	//2.4 设置一个key L,将hash作为value存进数据库中。作为最后一个 区块
 
-	return &Blockchain{tip, db}
+	//return &Blockchain{tip, db}
 }
 
 func dbExists() bool {
@@ -289,5 +312,4 @@ func dbExists() bool {
 	}
 
 	return true
-
 }

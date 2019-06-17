@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"math/big"
 	"showcaseBKT.com/publicChain/Serialize-DeserializeBlock/BLC"
@@ -38,22 +39,23 @@ func BlockIteraor() {
 //	cli.PrintChain()
 //}
 
+type StuRead struct {
+	Name  interface{}
+	Age   interface{}
+	HIgh  interface{}
+	Class json.RawMessage `json:"class"` //注意这里
+}
+
+type Class struct {
+	Name  string
+	Grade int
+}
+
 func main() {
-	blockchain := BLC.NewBlockchain()
-	cli := BLC.CLI{blockchain}
+
+	//main send -from [\"helloggggggggg\",\"apple\",\"java\",\"golang\"] -to [\"bbc\",\"btc\",\"bkc\",\"blc\"] -amount [\"10\",\"20\"]
+
+	cli := BLC.CLI{}
 	cli.Run()
-	//spentTXOs := make(map[string][]string)
-	//for k, v := range spentTXOs {
-	//	fmt.Printf("index %s,%d, \n", k, v)
-	//}
-	//nubmers := [] int{1, 2, 3, 4, 5, 6, 7, 8, 10, 1, 2, 3, 4, 5,6,6}
-	//for index, x := range nubmers {
-	//	vString :=strconv.Itoa(x)
-	//	fmt.Printf("第 %d 位 x 的值 = %d ,v: %s\n", index,x ,vString )
-	//	spentTXOs[vString ] = append(spentTXOs[vString ], vString )
-	//}
-	//
-	//for k, v := range spentTXOs {
-	//	fmt.Printf("index %s,%s, \n", k, v)
-	//}
+
 }
