@@ -10,13 +10,15 @@ import (
 )
 
 type Block struct {
+	//1. 区块高度
+//	Height int64
 	//时间戳 创建区块时的时间
 	Timestamp int64
 	//上一个区块Hash
 	PrevBlockHash []byte
+
 	//交易数据
-	//旧逻辑 交易数据用Data []byte ->Transcation []Transcation
-	Transcation []*Transcation
+	Txs []*Transcation
 	//当前区块Hash
 	Hash []byte
 	//Nonce 随机数
@@ -77,8 +79,8 @@ func (b *Block) Serialize() []byte {
 //将区块里面所有的交易id拼接生成Hash
 func (b *Block) HashTranscation() []byte {
 	var txHashes [][]byte
-	for _, tx := range b.Transcation {
-		txHashes = append(txHashes, tx.ID)
+	for _, tx := range b.Txs {
+		txHashes = append(txHashes, tx.TxHash)
 	}
 	txHash := sha256.Sum256(bytes.Join(txHashes, []byte{}))
 	return txHash[:]

@@ -3,9 +3,7 @@ package BLC
 import (
 	"flag"
 	"fmt"
-	"github.com/boltdb/bolt"
 	"log"
-	"math/big"
 	"os"
 )
 
@@ -22,92 +20,26 @@ func (cli *CLI) validateArgs() {
 }
 
 func (cli *CLI) PrintChain() {
-	blockchian:= GetBlockchain();
-
+	//检查是否有数据存在
+	existDB := DBExists()
+	if existDB == false {
+		fmt.Println("数据不存在.......")
+		os.Exit(1)
+	}
+	blockchian := BlockchainObject();
 	defer blockchian.DB.Close()
 
-	//检查是否有数据存在
-	existDB := dbExists()
-	fmt.Printf(" dbExists() %T:\n", existDB)
-	fmt.Printf("%d\n", existDB) // {1 2}
-
-	fmt.Printf("%+v\n", existDB) // {x:1 y:2}
-
-	fmt.Printf("%#v\n", existDB) // ma
-	if existDB == false {
-		cli.printUsage()
-		return
-	}
-	var blockchainIterator *BlockchainIterator
-	blockchainIterator = blockchian.Iterator()
-	var hashBigInt big.Int
-	fmt.Println("")
-	for {
-
-		err := blockchainIterator.DB.View(func(tx *bolt.Tx) error {
-			b := tx.Bucket([]byte(blocksBucket))
-			//通过hash获取到区块字节数组
-			currentBlockBytes := b.Get([]byte(blockchainIterator.CurrentHash))
-			currentBlock := DeserializeBlock(currentBlockBytes)
-			//fmt.Printf("Data:%s \n", currentBlock.Transcation)
-			fmt.Println("============START==============================")
-			fmt.Printf("PrevBlockHash:%x \n", currentBlock.PrevBlockHash)
-			fmt.Printf("Hash			:%x \n", currentBlock.Hash)
-			//fmt.Printf("Nonce			:%d \n", currentBlock.Nonce)
-			//	fmt.Printf("Timestamp		:%s \n", time.Unix(currentBlock.Timestamp, 0).Format("2006-01-02 15:04:05"))
-			for _, tx := range currentBlock.Transcation {
-				fmt.Println("\t**************************")
-				tx.printfTranscation()
-				fmt.Println("\t**************************")
-			}
-			fmt.Println("===========END===============================")
-			fmt.Println("")
-			return nil
-		})
-		if err != nil {
-			log.Panic(err)
-		}
-		//获取下一个迭代器
-		blockchainIterator = blockchainIterator.Next()
-
-		//是否到达创世区块
-		hashBigInt.SetBytes(blockchainIterator.CurrentHash)
-		if (hashBigInt.Cmp(big.NewInt(0)) == 0) {
-			break;
-		}
-	}
-}
-
-func (cli *CLI) SendToken() {
-	//1 .3->yjc
-	//   3->bakkt
-
-	//1.新建一个交易
-	var noPackageTxs []*Transcation
-	tx1 := NewUTXOTransaction("yhn", "BAKKT", 5, cli.BC, noPackageTxs)
-	noPackageTxs = append(noPackageTxs, tx1)
-
-	tx2 := NewUTXOTransaction("yhn", "YE", 5, cli.BC, noPackageTxs)
-	noPackageTxs = append(noPackageTxs, tx2)
-	////
-	tx3 := NewUTXOTransaction("yhn", "LY", 5, cli.BC, noPackageTxs)
-	noPackageTxs = append(noPackageTxs, tx3)
-
-	cli.BC.MineBlock([]*Transcation{tx1, tx2, tx3})
-}
-
-func (cli *CLI) addBlock(data string) {
-	cli.SendToken();
+	blockchian.Printchain()
 }
 
 //直接打印usage信息
 func (cli *CLI) printUsage() {
 	fmt.Println("")
 	fmt.Println("Usage:")
-	fmt.Println("\tcreateblockchain  \t-address \"address\"")
-	fmt.Println("\tgetbalance			\t-address  \"address\".")
-	fmt.Println("\tprintf				\t-print all the blocks of the blockchain.")
-	fmt.Println("\tsend				\t-from -to -amount")
+	fmt.Println("\tcreateblockchain  \t-address \"创建创世区块的地址...\"")
+	fmt.Println("\tgetbalance			\t-address  \"要查询某一个账号的余额......\".")
+	fmt.Println("\tprintf				\t-print 输出所有区块的数据.........")
+	fmt.Println("\tsend				\t-from \"转账源地址...\" -to \"转账目的地地址...\"  -amount \"转账金额......\"")
 }
 
 func (cli *CLI) Run() {
@@ -115,23 +47,23 @@ func (cli *CLI) Run() {
 	cli.validateArgs()
 	//创建区块
 	crateBlockchainCmd := flag.NewFlagSet("createblockchain", flag.ExitOnError)
-	genenisAddress := crateBlockchainCmd.String("address", "", "create block and package dtata")
+	flagCreateBlockchainWithAddress := crateBlockchainCmd.String("address", "", "创建创世区块的地址...")
 	//打印
 	printChainCmd := flag.NewFlagSet("printf", flag.ExitOnError)
 	//查询
-	getBalanceCmd := flag.NewFlagSet("getbalance", flag.ExitOnError)
-	balanceAddress := getBalanceCmd.String("address", "", "create block and package dtata")
+	getbalanceCmd := flag.NewFlagSet("getbalance", flag.ExitOnError)
+	getbalanceWithAdress := getbalanceCmd.String("address", "", "要查询某一个账号的余额.......")
 
 	//转帐
-	sendCmd := flag.NewFlagSet("send", flag.ExitOnError)
-	sendFrom := sendCmd.String("from", "", "源地址")
-	sendTo := sendCmd.String("to", "", "目标地址")
-	sendAmount := sendCmd.String("amount", "", "转帐的额度")
+	sendBlockCmd := flag.NewFlagSet("send", flag.ExitOnError)
+	sendFrom := sendBlockCmd.String("from", "", "转账源地址...")
+	sendTo := sendBlockCmd.String("to", "", "转账目的地地址...")
+	sendAmount := sendBlockCmd.String("amount", "", "转账金额......")
 
 	switch os.Args[1] {
 
 	case "send":
-		err := sendCmd.Parse(os.Args[2:])
+		err := sendBlockCmd.Parse(os.Args[2:])
 		if err != nil {
 			log.Panic(err)
 		}
@@ -141,7 +73,7 @@ func (cli *CLI) Run() {
 			log.Panic(err)
 		}
 	case "getbalance":
-		err := getBalanceCmd.Parse(os.Args[2:])
+		err := getbalanceCmd.Parse(os.Args[2:])
 		if err != nil {
 			log.Panic(err)
 		}
@@ -155,48 +87,73 @@ func (cli *CLI) Run() {
 		os.Exit(1)
 	}
 
-	if crateBlockchainCmd.Parsed() {
-		if *genenisAddress == "" {
-			cli.printUsage()
-			os.Exit(1)
-		}
-		cli.crateBlockchain(*genenisAddress)
-	}
-
-	if sendCmd.Parsed() {
-		fmt.Printf("from:%s, to:%s,amount %s \n", *sendFrom, *sendTo, *sendAmount)
+	if sendBlockCmd.Parsed() {
+		fmt.Printf("开始转帐， 转账源地址%s -> 转账目的地址:%s,转账金额:%s \n", *sendFrom, *sendTo, *sendAmount)
 		if *sendFrom == "" || *sendTo == "" || *sendAmount == "" {
-			//fmt.Println("null---")
+			fmt.Println("转账源地址,转账目的地址, 转账金额 不能为空....")
 			cli.printUsage()
 			os.Exit(1)
 		}
-		//fmt.Println("json ->array[]")
-		fromAddress:=JSONtoArray(*sendFrom)
-		toAddress:=JSONtoArray(*sendTo)
-		sendAmount:=JSONtoArray(*sendAmount)
+		fromAddress := JSONtoArray(*sendFrom)
+		toAddress := JSONtoArray(*sendTo)
+		amount := JSONtoArray(*sendAmount)
 
-		fmt.Printf("from %s\n",fromAddress)
-		fmt.Printf("to: %s\n",toAddress)
-		fmt.Printf("amount: %s\n",sendAmount)
+		fmt.Printf("from %s\n", fromAddress)
+		fmt.Printf("to: %s\n", toAddress)
+		fmt.Printf("amount: %s\n", amount)
+		cli.send(fromAddress, toAddress, amount)
 	}
-
 	if printChainCmd.Parsed() {
+		fmt.Println("开始输出所有区块的数据........")
 		cli.PrintChain()
 	}
 
-	if getBalanceCmd.Parsed() {
-		if *balanceAddress == "" {
+	if crateBlockchainCmd.Parsed() {
+		fmt.Println("开始创建创世区块....")
+		if *flagCreateBlockchainWithAddress == "" {
+			fmt.Println("地址不能为空....")
 			cli.printUsage()
 			os.Exit(1)
 		}
-		fmt.Printf("查询%s 的余额", balanceAddress)
+		cli.createGenesisBlockchain(*flagCreateBlockchainWithAddress)
+	}
+
+	if getbalanceCmd.Parsed() {
+		fmt.Printf("开始查询%s地址余额........\n",*getbalanceWithAdress)
+		if *getbalanceWithAdress == "" {
+			fmt.Println("查询地址不能为空....")
+			cli.printUsage()
+			os.Exit(1)
+		}
+		cli.getBalance(*getbalanceWithAdress)
 	}
 }
+
 //创建创世区块
-func (cli *CLI) crateBlockchain(genesis string)  {
-	if dbExists() {
+func (cli *CLI) createGenesisBlockchain(genesis string) {
+	if DBExists() {
 		fmt.Println("创世区块已经存在")
 		os.Exit(1)
 	}
-	CrateGenesisBlockchain(genesis)
+	CreateBlockchainWithGenesisBlock(genesis)
+}
+
+//转帐
+func (cli *CLI) send(from []string, to []string, amount []string) {
+	//if DBExists() == false {
+	//	fmt.Println("数据不存在...")
+	//	os.Exit(1)
+	//}
+	blockchain := BlockchainObject()
+	defer blockchain.DB.Close()
+
+	blockchain.MineNewBlock(from, to, amount)
+}
+// 查询余额
+func (cli *CLI) getBalance(address string) {
+	blockchain := BlockchainObject()
+	defer blockchain.DB.Close()
+
+	amount :=blockchain.GetBalance(address)
+	fmt.Printf("%s 一共有%d个Token\n",address,amount)
 }

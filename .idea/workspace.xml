@@ -2,33 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3327ed57-722c-4308-8f3c-2a975de918cd" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/kongyixueyuan.com/publicChain/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/kongyixueyuan.com/publicChain/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/kongyixueyuan.com/publicChain/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/kongyixueyuan.com/publicChain/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/kongyixueyuan.com/publicChain/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/kongyixueyuan.com/publicChain/Basic-Prototype/BLC/block.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/kongyixueyuan.com/publicChain/Basic-Prototype/BLC/blockchain.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/kongyixueyuan.com/publicChain/Basic-Prototype/main.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/kongyixueyuan.com/publicChain/BoltDB-Create/main.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/kongyixueyuan.com/publicChain/BoltDB-Update/main.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/kongyixueyuan.com/publicChain/BoltDB-View/main.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/kongyixueyuan.com/publicChain/Proof-of-work/BLC/block.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/kongyixueyuan.com/publicChain/Proof-of-work/BLC/blockchain.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/kongyixueyuan.com/publicChain/Proof-of-work/BLC/printer.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/kongyixueyuan.com/publicChain/Proof-of-work/BLC/proofOfWork.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/kongyixueyuan.com/publicChain/Proof-of-work/BLC/utils.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/kongyixueyuan.com/publicChain/Proof-of-work/main.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/kongyixueyuan.com/publicChain/Serialize-DeserializeBlock/BLC/block.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/kongyixueyuan.com/publicChain/Serialize-DeserializeBlock/BLC/blockchain.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/kongyixueyuan.com/publicChain/Serialize-DeserializeBlock/BLC/proofOfWork.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/kongyixueyuan.com/publicChain/Serialize-DeserializeBlock/BLC/utils.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/kongyixueyuan.com/publicChain/Serialize-DeserializeBlock/main.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/kongyixueyuan.com/publicChain/blockchain.db" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/kongyixueyuan.com/publicChain/blockchain.db.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/kongyixueyuan.com/publicChain/flag/main.exe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/kongyixueyuan.com/publicChain/flag/main.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/kongyixueyuan.com/publicChain/publicChain.iml" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/showcaseBKT.com/publicChain/Serialize-DeserializeBlock/BLC/UTXO.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/showcaseBKT.com/publicChain/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/showcaseBKT.com/publicChain/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/showcaseBKT.com/publicChain/Serialize-DeserializeBlock/BLC/blockchain.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/showcaseBKT.com/publicChain/Serialize-DeserializeBlock/BLC/blockchain.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/showcaseBKT.com/publicChain/Serialize-DeserializeBlock/BLC/blockchainIterator.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/showcaseBKT.com/publicChain/Serialize-DeserializeBlock/BLC/blockchainIterator.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/showcaseBKT.com/publicChain/Serialize-DeserializeBlock/BLC/cli.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/showcaseBKT.com/publicChain/Serialize-DeserializeBlock/BLC/cli.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/showcaseBKT.com/publicChain/Serialize-DeserializeBlock/BLC/transcation.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/showcaseBKT.com/publicChain/Serialize-DeserializeBlock/BLC/transcation.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/showcaseBKT.com/publicChain/Serialize-DeserializeBlock/blockchain.db" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/showcaseBKT.com/publicChain/Serialize-DeserializeBlock/blockchain.db.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/showcaseBKT.com/publicChain/Serialize-DeserializeBlock/main.exe" beforeDir="false" afterPath="$PROJECT_DIR$/src/showcaseBKT.com/publicChain/Serialize-DeserializeBlock/main.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/showcaseBKT.com/publicChain/Serialize-DeserializeBlock/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/showcaseBKT.com/publicChain/Serialize-DeserializeBlock/main.go" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -40,9 +24,10 @@
     <session id="-413231862">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="3" />
+          <entry key="project.closed" value="4" />
           <entry key="project.open.time.1" value="3" />
-          <entry key="project.opened" value="3" />
+          <entry key="project.open.time.14" value="1" />
+          <entry key="project.opened" value="4" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -58,7 +43,7 @@
     </session>
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
+    <leaf />
   </component>
   <component name="GOROOT" path="C:/go1.12.4.windows-amd64/go" />
   <component name="Git.Settings">
@@ -71,8 +56,8 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="317" />
-    <option name="y" value="118" />
+    <option name="x" value="93" />
+    <option name="y" value="211" />
     <option name="width" value="1280" />
     <option name="height" value="787" />
   </component>
@@ -82,8 +67,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -100,6 +83,8 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -137,16 +122,17 @@
       <workItem from="1557300561379" duration="18000" />
       <workItem from="1557392439505" duration="35000" />
       <workItem from="1559185969460" duration="5000" />
+      <workItem from="1561010371356" duration="66000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="58000" />
+    <option name="totallyTimeSpent" value="124000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="317" y="118" width="1280" height="787" extended-state="0" />
+    <frame x="93" y="211" width="1280" height="787" extended-state="0" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2581967" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.26229507" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />

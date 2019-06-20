@@ -10,23 +10,23 @@ type BlockchainIterator struct {
 	DB          *bolt.DB //数据库
 }
 
-//迭代器
-func (blockchain *Blockchain) Iterator() *BlockchainIterator {
-	return &BlockchainIterator{blockchain.Tip, blockchain.DB}
-}
 
 //获取前一个迭代器
-func (bi *BlockchainIterator) Next() *BlockchainIterator {
-	var nextHash []byte
+func (blockchainIterator *BlockchainIterator) Next() *Block {
+	//var nextHash []byte
+var block *Block
 
-	err := bi.DB.View(func(tx *bolt.Tx) error {
+	err := blockchainIterator.DB.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(blocksBucket))
-		currentBlockBytes := b.Get([]byte(bi.CurrentHash))
+		if b != nil {
+			currentBlockBytes := b.Get(blockchainIterator.CurrentHash)
 
-		currentBlock := DeserializeBlock(currentBlockBytes)
+			//  获取到当前迭代器里面的currentHash所对应的区块
+			block= DeserializeBlock(currentBlockBytes)
 
-		nextHash = currentBlock.PrevBlockHash
-
+			// 更新迭代器里面CurrentHash
+			blockchainIterator.CurrentHash = block.PrevBlockHash
+		}
 		return nil
 	})
 
@@ -34,5 +34,7 @@ func (bi *BlockchainIterator) Next() *BlockchainIterator {
 		log.Panic(err)
 	}
 
-	return &BlockchainIterator{nextHash, bi.DB}
+	//return &BlockchainIterator{nextHash, blockchainIterator.DB}
+	return block;
 }
+
