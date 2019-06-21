@@ -71,18 +71,14 @@ func NewCoinbaseTransaction(address string) *Transcation {
 
 //建立交易
 //2. 转账时产生的Transaction
-func NewSimpleTransaction(from string, to string, amount int, blockchain *Blockchain) *Transcation {
+func NewSimpleTransaction(from string, to string, amount int, blockchain *Blockchain,txs []*Transcation) *Transcation {
 
 	fmt.Printf("Create a NewSimpleTransaction..from:%s->to:%s \n", from, to)
 
 	//1.找到有效的可用的交易输出数据模型
 	//查询出未花费的输出  (int,map[string][]int)
 
-	money, spendableUTXODic := blockchain.FindSpendableUTXOS(from, amount)
-
-	fmt.Println("NewSimpleTransaction")
-	fmt.Println(spendableUTXODic)
-	fmt.Println(amount)
+	money, spendableUTXODic := blockchain.FindSpendableUTXOS(from, amount,txs)
 
 	//输入
 	var txIntputs []*TXInput

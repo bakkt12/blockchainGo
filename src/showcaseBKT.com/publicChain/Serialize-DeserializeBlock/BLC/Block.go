@@ -11,7 +11,7 @@ import (
 
 type Block struct {
 	//1. 区块高度
-//	Height int64
+	Height int64
 	//时间戳 创建区块时的时间
 	Timestamp int64
 	//上一个区块Hash
@@ -46,8 +46,8 @@ type Block struct {
   产生新的区块工厂方法，
 */
 func
-NewBlock(transcation []*Transcation, prevBlockHash []byte) *Block {
-	block := &Block{time.Now().Unix(), prevBlockHash, transcation, []byte{}, 0}
+NewBlock(transcation []*Transcation,height int64, prevBlockHash []byte) *Block {
+	block := &Block{height,time.Now().Unix(), prevBlockHash, transcation, []byte{}, 0}
 	//将block作为参数 创建一个pow对象
 	pow := NewProofOfWork(block)
 
@@ -99,5 +99,5 @@ func DeserializeBlock(d []byte) *Block {
 
 //创建创世区块
 func NewGenesisBlock(conbase *Transcation) *Block {
-	return NewBlock([]*Transcation{conbase}, []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
+	return NewBlock([]*Transcation{conbase},1, []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
 }

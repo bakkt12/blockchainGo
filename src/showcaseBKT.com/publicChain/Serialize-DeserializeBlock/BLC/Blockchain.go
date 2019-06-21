@@ -55,8 +55,8 @@ func (blockchian *Blockchain) Printchain() {
 		//fmt.Printf("Nonce			:%d \n", block.Nonce)
 
 		for _, transcation := range block.Txs {
-			fmt.Println("\t**************************")
-			fmt.Printf("\t ####txid:		%x\n", transcation.TxHash)
+			fmt.Println("**************************")
+			fmt.Printf("####txid:		%x\n", transcation.TxHash)
 			fmt.Println("\t-------Vins:")
 			for _, in := range transcation.Vins {
 				fmt.Printf("\tvin txid        :%x\n", in.TxHash)
@@ -69,7 +69,7 @@ func (blockchian *Blockchain) Printchain() {
 				fmt.Printf("\tvout ScriptPubKey:%s\n", out.ScriptPubKey)
 				fmt.Printf("\tvout amount      :%d\n", out.Value)
 			}
-			fmt.Println("\t**************************")
+			fmt.Println("**************************")
 		}
 
 		var hashBigInt big.Int
@@ -84,11 +84,23 @@ func (blockchian *Blockchain) Printchain() {
 }
 
 //从一个地址对应的TXoutput未花费
-func (blockchain *Blockchain) UnUTXOs(address string) []*UTXO {
+// 多笔转帐时要把准备打包的txs也要传进来一同计算
+func (blockchain *Blockchain) UnUTXOs(address string, txs []*Transcation) []*UTXO {
 
 	var unUTXOs []*UTXO
 	//某个 tx 对应它已消费的input的VoutIndex, 001->int{0,1}
 	spentTXOutputs := make(map[string][]int)
+
+	for _, tx := range txs {
+		if tx.IsCoinbaseTransaction() == false {
+			for _, in := range tx.Vins {
+				if in.UnLockWithAddress(address) {
+					key := hex.EncodeToString(in.TxHash)
+					spentTXOutputs[key] = append(spentTXOutputs[key], in.VoutIndex)
+				}
+			}
+		}
+	}
 
 	blockIterator := blockchain.Iterator()
 
@@ -138,7 +150,6 @@ func (blockchain *Blockchain) UnUTXOs(address string) []*UTXO {
 				}
 			} //end Vouts for
 
-			fmt.Println(unUTXOs)
 		} //end tx for
 		var hashBigInt big.Int
 		//是否到达创世区块
@@ -151,12 +162,12 @@ func (blockchain *Blockchain) UnUTXOs(address string) []*UTXO {
 }
 
 // 转账时查找可用的UTXO
-func (blockchain *Blockchain) FindSpendableUTXOS(from string, amount int) (int64, map[string][]int) {
+func (blockchain *Blockchain) FindSpendableUTXOS(from string, amount int, txs []*Transcation) (int64, map[string][]int) {
 
 	//交易id对应未消费的txoutput的index
 	unspentOutputs := make(map[string][]int)
 	//查看未花费
-	utxos := blockchain.UnUTXOs(from)
+	utxos := blockchain.UnUTXOs(from, txs)
 
 	//2. 遍历utxos
 	var value int64 //统计【unspentOutputs】对应的txoutput未花费总量
@@ -183,16 +194,13 @@ func (blockchain *Blockchain) MineNewBlock(from []string, to []string, amount []
 	//main send -from [\"helloggggggggg\",\"apple\",\"java\",\"golang\"] -to [\"bbc\",\"btc\",\"bkc\",\"blc\"] -amount [\"10\",\"20\"]
 
 	//1.建立一笔交易
-	//fmt.Println(from)
-	//fmt.Println(to)
-	//fmt.Println(amount)
-
-	value, _ := strconv.Atoi(amount[0])
-
 	//1. 通过相关算法建立Transaction数组
-	tx := NewSimpleTransaction(from[0], to[0], value, blockchain)
 	var txs []*Transcation
-	txs = append(txs, tx)
+	for index, address := range from {
+		value, _ := strconv.Atoi(amount[index])
+		tx := NewSimpleTransaction(address, to[index], value, blockchain, txs)
+		txs = append(txs, tx)
+	}
 
 	var block *Block
 	blockchain.DB.View(func(tx *bolt.Tx) error {
@@ -207,7 +215,7 @@ func (blockchain *Blockchain) MineNewBlock(from []string, to []string, amount []
 	})
 
 	//2.创建区块
-	newBlock := NewBlock(txs, block.Hash)
+	newBlock := NewBlock(txs, block.Height+1, block.Hash)
 
 	//2. update 数据库
 	err := blockchain.DB.Update(func(tx *bolt.Tx) error {
@@ -327,7 +335,7 @@ func CreateBlockchainWithGenesisBlock(genesisAddress string) *Blockchain {
 
 // 查询余额
 func (blockchain *Blockchain) GetBalance(address string) int64 {
-	utxos := blockchain.UnUTXOs(address)
+	utxos := blockchain.UnUTXOs(address, []*Transcation{})
 	var amount int64
 	for _, utxo := range utxos {
 		amount = amount + utxo.OutPut.Value
