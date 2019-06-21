@@ -19,19 +19,6 @@ func (cli *CLI) validateArgs() {
 	}
 }
 
-func (cli *CLI) PrintChain() {
-	//检查是否有数据存在
-	existDB := DBExists()
-	if existDB == false {
-		fmt.Println("数据不存在.......")
-		os.Exit(1)
-	}
-	blockchian := BlockchainObject();
-	defer blockchian.DB.Close()
-
-	blockchian.Printchain()
-}
-
 //直接打印usage信息
 func (cli *CLI) printUsage() {
 	fmt.Println("")
@@ -119,7 +106,7 @@ func (cli *CLI) Run() {
 	}
 
 	if getbalanceCmd.Parsed() {
-		fmt.Printf("开始查询%s地址余额........\n",*getbalanceWithAdress)
+		fmt.Printf("开始查询%s地址余额........\n", *getbalanceWithAdress)
 		if *getbalanceWithAdress == "" {
 			fmt.Println("查询地址不能为空....")
 			cli.printUsage()
@@ -127,33 +114,4 @@ func (cli *CLI) Run() {
 		}
 		cli.getBalance(*getbalanceWithAdress)
 	}
-}
-
-//创建创世区块
-func (cli *CLI) createGenesisBlockchain(genesis string) {
-	if DBExists() {
-		fmt.Println("创世区块已经存在")
-		os.Exit(1)
-	}
-	CreateBlockchainWithGenesisBlock(genesis)
-}
-
-//转帐
-func (cli *CLI) send(from []string, to []string, amount []string) {
-	//if DBExists() == false {
-	//	fmt.Println("数据不存在...")
-	//	os.Exit(1)
-	//}
-	blockchain := BlockchainObject()
-	defer blockchain.DB.Close()
-
-	blockchain.MineNewBlock(from, to, amount)
-}
-// 查询余额
-func (cli *CLI) getBalance(address string) {
-	blockchain := BlockchainObject()
-	defer blockchain.DB.Close()
-
-	amount :=blockchain.GetBalance(address)
-	fmt.Printf("%s 一共有%d个Token\n",address,amount)
 }
