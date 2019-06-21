@@ -51,21 +51,7 @@ func (tx *Transcation) IsCoinbaseTransaction() bool {
 	return tx.Vins[0].VoutIndex == -1 && len(tx.Vins[0].TxHash) == 0
 }
 
-func (transcation *Transcation) printfTranscation() {
-	fmt.Printf("\t ####txid:		%x\n", transcation.TxHash)
-	fmt.Println("\t-------Vins:")
-	for _, in := range transcation.Vins {
-		fmt.Printf("\tvin txid        :%x\n", in.TxHash)
-		fmt.Printf("\tvin ScriptPubKey:%s\n", in.ScriptSig)
-		fmt.Printf("\tvin voutIndex   :%d\n", in.VoutIndex)
-	}
 
-	fmt.Println("\t--------Vouts:")
-	for _, out := range transcation.Vouts {
-		fmt.Printf("\tvout ScriptPubKey:%s\n", out.ScriptPubKey)
-		fmt.Printf("\tvout amount      :%d\n", out.Value)
-	}
-}
 
 //1. Transaction 创建分两种情况
 //1. 创世区块创建时的Transaction
@@ -87,12 +73,16 @@ func NewCoinbaseTransaction(address string) *Transcation {
 //2. 转账时产生的Transaction
 func NewSimpleTransaction(from string, to string, amount int, blockchain *Blockchain) *Transcation {
 
-	//fmt.Printf("Create a NewSimpleTransaction..from:%s->to:%s \n", from, to)
+	fmt.Printf("Create a NewSimpleTransaction..from:%s->to:%s \n", from, to)
 
 	//1.找到有效的可用的交易输出数据模型
 	//查询出未花费的输出  (int,map[string][]int)
 
 	money, spendableUTXODic := blockchain.FindSpendableUTXOS(from, amount)
+
+	fmt.Println("NewSimpleTransaction")
+	fmt.Println(spendableUTXODic)
+	fmt.Println(amount)
 
 	//输入
 	var txIntputs []*TXInput

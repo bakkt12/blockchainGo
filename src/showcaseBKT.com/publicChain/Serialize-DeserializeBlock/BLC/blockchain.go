@@ -8,7 +8,6 @@ import (
 	"math/big"
 	"os"
 	"strconv"
-	"time"
 )
 
 //数据库名
@@ -52,12 +51,24 @@ func (blockchian *Blockchain) Printchain() {
 		//	fmt.Printf("Height：:%d \n", block.Height)
 		fmt.Printf("PrevBlockHash:%x \n", block.PrevBlockHash)
 		fmt.Printf("Hash			:%x \n", block.Hash)
-		fmt.Printf("Timestamp		:%s \n", time.Unix(block.Timestamp, 0).Format("2006-01-02 15:04:05"))
-		fmt.Printf("Nonce			:%d \n", block.Nonce)
+		//fmt.Printf("Timestamp		:%s \n", time.Unix(block.Timestamp, 0).Format("2006-01-02 15:04:05"))
+		//fmt.Printf("Nonce			:%d \n", block.Nonce)
 
-		for _, tx := range block.Txs {
+		for _, transcation := range block.Txs {
 			fmt.Println("\t**************************")
-			tx.printfTranscation()
+			fmt.Printf("\t ####txid:		%x\n", transcation.TxHash)
+			fmt.Println("\t-------Vins:")
+			for _, in := range transcation.Vins {
+				fmt.Printf("\tvin txid        :%x\n", in.TxHash)
+				fmt.Printf("\tvin ScriptPubKey:%s\n", in.ScriptSig)
+				fmt.Printf("\tvin voutIndex   :%d\n", in.VoutIndex)
+			}
+
+			fmt.Println("\t--------Vouts:")
+			for _, out := range transcation.Vouts {
+				fmt.Printf("\tvout ScriptPubKey:%s\n", out.ScriptPubKey)
+				fmt.Printf("\tvout amount      :%d\n", out.Value)
+			}
 			fmt.Println("\t**************************")
 		}
 
@@ -97,6 +108,7 @@ func (blockchain *Blockchain) UnUTXOs(address string) []*UTXO {
 			} //end if
 
 			// Vouts
+		work:
 			for index, out := range tx.Vouts {
 				//是否已经被花费
 				if out.UnLockScriptPubKeyWithAddress(address) {
@@ -104,15 +116,19 @@ func (blockchain *Blockchain) UnUTXOs(address string) []*UTXO {
 						if len(spentTXOutputs) != 0 {
 							//key->[]index
 							//map[cea12d33b2e7083221bf3401764fb661fd6c34fab50f5460e77628c42ca0e92b:[0]]
-							for spentTxID, indexArray := range spentTXOutputs {
+							var isSpentUTXO bool
+							for txHash, indexArray := range spentTXOutputs {
 								for _, voutIndex := range indexArray {
-									if index == voutIndex && spentTxID == hex.EncodeToString(tx.TxHash) {
-										continue
-									} else {
-										utxo := &UTXO{tx.TxHash, index, out}
-										unUTXOs = append(unUTXOs, utxo)
+									if index == voutIndex && txHash == hex.EncodeToString(tx.TxHash) {
+										isSpentUTXO = true
+										continue work
 									}
 								}
+							}
+
+							if isSpentUTXO == false {
+								utxo := &UTXO{tx.TxHash, index, out}
+								unUTXOs = append(unUTXOs, utxo)
 							}
 						} else {
 							utxo := &UTXO{tx.TxHash, index, out}
@@ -121,6 +137,8 @@ func (blockchain *Blockchain) UnUTXOs(address string) []*UTXO {
 					}
 				}
 			} //end Vouts for
+
+			fmt.Println(unUTXOs)
 		} //end tx for
 		var hashBigInt big.Int
 		//是否到达创世区块
