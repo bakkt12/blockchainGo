@@ -88,7 +88,7 @@ func (cli *CLI) Run() {
 		fmt.Printf("from %s\n", fromAddress)
 		fmt.Printf("to: %s\n", toAddress)
 		fmt.Printf("amount: %s\n", amount)
-		cli.send(fromAddress, toAddress, amount)
+		cli.Send(fromAddress, toAddress, amount)
 	}
 	if printChainCmd.Parsed() {
 		fmt.Println("开始输出所有区块的数据........")

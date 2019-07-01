@@ -56,4 +56,9 @@ func main() {
 	cli := BLC.CLI{}
 	cli.Run()
 
+	//cli:= BLC.CLI{}
+	//from := []string{"yhn", "yhn", "yhn"}
+	//to := []string{"yjc111", "yjc222", "yjc333"}
+	//amount := []string{"5", "5", "5"}
+	//cli.Send(from,to,amount)
 }
