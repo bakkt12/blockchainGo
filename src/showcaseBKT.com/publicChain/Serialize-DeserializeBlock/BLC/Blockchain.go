@@ -95,7 +95,7 @@ func (blockchain *Blockchain) UnUTXOs(address string, txs []*Transcation) []*UTX
 		if tx.IsCoinbaseTransaction() == false {
 			for _, in := range tx.Vins {
 				if in.UnLockWithAddress(address) {
-					fmt.Println("打印所有txs tx hxh:", hex.EncodeToString(tx.TxHash), ",in hash", hex.EncodeToString(in.TxHash), in.VoutIndex);
+					fmt.Println("打印所有txs ,tx hash- in hash-inindex:", hex.EncodeToString(tx.TxHash), ",in hash", hex.EncodeToString(in.TxHash), in.VoutIndex);
 				}
 			}
 		}
@@ -112,10 +112,10 @@ func (blockchain *Blockchain) UnUTXOs(address string, txs []*Transcation) []*UTX
 			}
 		}
 	}
-	fmt.Println("=======spentTXOutputs===========================")
+	fmt.Println("=======每个Txs中 已消费的 output===============")
 	for key, indexArray := range spentTXOutputs {
 		for _, voutIndex := range indexArray {
-			fmt.Println("已消费的outp:", key , voutIndex);
+			fmt.Println("已消费的output key - index:", key , voutIndex);
 		}
 	}
 
@@ -148,7 +148,6 @@ func (blockchain *Blockchain) UnUTXOs(address string, txs []*Transcation) []*UTX
 		}
 	}
 
-	fmt.Printf("===== unUTXOs length:  %d  \n", len(unUTXOs))
 	blockIterator := blockchain.Iterator()
 	for {
 		block := blockIterator.Next()
@@ -187,10 +186,12 @@ func (blockchain *Blockchain) UnUTXOs(address string, txs []*Transcation) []*UTX
 							if isSpentUTXO == false {
 								utxo := &UTXO{tx.TxHash, index, out}
 								unUTXOs = append(unUTXOs, utxo)
+								fmt.Println("inser进UTXOs21",hex.EncodeToString(tx.TxHash) , index, out);
 							}
 						} else {
 							utxo := &UTXO{tx.TxHash, index, out}
 							unUTXOs = append(unUTXOs, utxo)
+							fmt.Println("inser进UTXOs2",hex.EncodeToString(tx.TxHash) , index, out);
 						}
 					}
 				}
@@ -394,7 +395,6 @@ func (blockchain *Blockchain) GetBalance(address string) int64 {
 	var amount int64
 	for _, utxo := range utxos {
 		fmt.Println(utxo.TxHash, utxo.Index, utxo.OutPut.Value)
-
 		amount = amount + utxo.OutPut.Value
 	}
 	return amount
