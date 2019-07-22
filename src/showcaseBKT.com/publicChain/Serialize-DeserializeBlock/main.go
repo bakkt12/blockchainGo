@@ -74,7 +74,6 @@ func main() {
 
 	//sli := []int{1,2,3,4,5}
 	//sli = sli[:]
-
-	fmt.Println(sli)
+	//fmt.Println(sli)
 
 }

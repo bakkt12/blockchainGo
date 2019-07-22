@@ -1,6 +1,7 @@
 package BLC
 
 import (
+	"bytes"
 	"crypto/ecdsa"
 	"crypto/elliptic"
 	"crypto/rand"
@@ -21,14 +22,31 @@ type Wallet struct {
 	PublicKey []byte
 }
 
-func  IsValidForAddress(address []byte)  bool{
+func IsValidForAddress(address []byte) bool {
+	/**
+	Version  Public key hash                           Checksum
+	00       62E907B15CBF27D5425399EBF6F0FB50EBB88F18  C29B7D93
 
-	version_public_checkSumBytes:= Base58Decode(address)
+	 */
+	version_public_checkSumBytes := Base58Decode(address)
 
 	fmt.Println(address)
 	fmt.Println(version_public_checkSumBytes)
+	//最后面4个字节（检查字节）
+	checkSumBytes := version_public_checkSumBytes[len(version_public_checkSumBytes)-addressChecksumLen:]
+	//前面21个字节（version+ ripem160)
+	versionRipemd160Bytes := version_public_checkSumBytes[:len(version_public_checkSumBytes)-addressChecksumLen]
 
-	return true
+	fmt.Printf("%s\n",checkSumBytes)
+
+	fmt.Printf("%s\n",versionRipemd160Bytes)
+
+	checkBytes:=checksum(versionRipemd160Bytes)
+
+	if bytes.Compare(checkSumBytes,checkBytes) ==0 {
+		return true
+	}
+	return false;
 }
 func (w *Wallet) Getaddress() []byte {
 	//1.使用 RIPEMD160(SHA256(PubKey)) 哈希算法，取公钥并对其哈希两次
