@@ -2,17 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3327ed57-722c-4308-8f3c-2a975de918cd" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/showcaseBKT.com/publicChain/Serialize-DeserializeBlock/BLC/UTXO.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/showcaseBKT.com/publicChain/sha256/main.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/showcaseBKT.com/publicChain/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/showcaseBKT.com/publicChain/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/showcaseBKT.com/publicChain/Serialize-DeserializeBlock/BLC/blockchain.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/showcaseBKT.com/publicChain/Serialize-DeserializeBlock/BLC/blockchain.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/showcaseBKT.com/publicChain/Serialize-DeserializeBlock/BLC/blockchainIterator.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/showcaseBKT.com/publicChain/Serialize-DeserializeBlock/BLC/blockchainIterator.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/showcaseBKT.com/publicChain/Serialize-DeserializeBlock/BLC/cli.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/showcaseBKT.com/publicChain/Serialize-DeserializeBlock/BLC/cli.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/showcaseBKT.com/publicChain/Serialize-DeserializeBlock/BLC/transcation.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/showcaseBKT.com/publicChain/Serialize-DeserializeBlock/BLC/transcation.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/showcaseBKT.com/publicChain/Serialize-DeserializeBlock/blockchain.db" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/showcaseBKT.com/publicChain/Serialize-DeserializeBlock/blockchain.db.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/showcaseBKT.com/publicChain/Serialize-DeserializeBlock/main.exe" beforeDir="false" afterPath="$PROJECT_DIR$/src/showcaseBKT.com/publicChain/Serialize-DeserializeBlock/main.exe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/showcaseBKT.com/publicChain/Serialize-DeserializeBlock/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/showcaseBKT.com/publicChain/Serialize-DeserializeBlock/main.go" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -24,10 +15,11 @@
     <session id="-413231862">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="4" />
+          <entry key="project.closed" value="5" />
+          <entry key="project.open.time.0" value="1" />
           <entry key="project.open.time.1" value="3" />
           <entry key="project.open.time.14" value="1" />
-          <entry key="project.opened" value="4" />
+          <entry key="project.opened" value="5" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -56,8 +48,8 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="93" />
-    <option name="y" value="211" />
+    <option name="x" value="127" />
+    <option name="y" value="74" />
     <option name="width" value="1280" />
     <option name="height" value="787" />
   </component>
@@ -79,12 +71,33 @@
               <item name="blockchainGo" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="blockchainGo" type="b2602c69:ProjectViewProjectNode" />
+              <item name="blockchainGo" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="showcaseBKT.com" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="blockchainGo" type="b2602c69:ProjectViewProjectNode" />
+              <item name="blockchainGo" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="showcaseBKT.com" type="462c0819:PsiDirectoryNode" />
+              <item name="publicChain" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="blockchainGo" type="b2602c69:ProjectViewProjectNode" />
+              <item name="blockchainGo" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="showcaseBKT.com" type="462c0819:PsiDirectoryNode" />
+              <item name="publicChain" type="462c0819:PsiDirectoryNode" />
+              <item name=".idea" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -123,16 +136,17 @@
       <workItem from="1557392439505" duration="35000" />
       <workItem from="1559185969460" duration="5000" />
       <workItem from="1561010371356" duration="66000" />
+      <workItem from="1562912248973" duration="30000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="124000" />
+    <option name="totallyTimeSpent" value="154000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="93" y="211" width="1280" height="787" extended-state="0" />
+    <frame x="127" y="74" width="1280" height="787" extended-state="0" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.26229507" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.26639345" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />

@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"showcaseBKT.com/publicChain/Serialize-DeserializeBlock/BLC"
 )
 
@@ -49,10 +50,8 @@ type Class struct {
 	Grade int
 }
 
-func main() {
-
+func runCLI() {
 	//main send -from [\"helloggggggggg\",\"apple\",\"java\",\"golang\"] -to [\"bbc\",\"btc\",\"bkc\",\"blc\"] -amount [\"10\",\"20\"]
-
 	cli := BLC.CLI{}
 	cli.Run()
 
@@ -61,4 +60,21 @@ func main() {
 	//to := []string{"yjc111", "yjc222", "yjc333"}
 	//amount := []string{"5", "5", "5"}
 	//cli.Send(from,to,amount)
+}
+
+func main() {
+
+	wallet := BLC.NewWallet()
+	address := wallet.Getaddress()
+	fmt.Printf("address %s \n", address)
+
+	isValid:= BLC.IsValidForAddress(address)
+	fmt.Printf("%s 这个地址为 %v\n",address,isValid)
+
+
+	//sli := []int{1,2,3,4,5}
+	//sli = sli[:]
+
+	fmt.Println(sli)
+
 }
