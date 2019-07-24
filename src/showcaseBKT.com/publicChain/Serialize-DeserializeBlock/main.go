@@ -71,7 +71,7 @@ func  checkNewWallet()  {
 	fmt.Printf("%s 这个地址为 %v\n",address,isValid)
 }
 func TestNewWallets()  {
-	wallets:= BLC.NewWallets()
+	wallets,_:= BLC.NewWallets()
 	fmt.Println(wallets)
 	wallets.CreateNewWallet()
 	wallets.CreateNewWallet()

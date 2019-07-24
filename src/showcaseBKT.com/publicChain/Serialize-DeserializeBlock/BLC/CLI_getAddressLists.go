@@ -7,8 +7,9 @@ func (cli *CLI) getaddresslists() {
 	//打印出所有
 	fmt.Println("打印所有钱包地址..")
 
-	wallets := NewWallets()
-	for key, _ := range wallets.WalletsMap {
-		fmt.Println(key)
+	wallets, _ := NewWallets()
+	addresses := wallets.GetAddresses
+	for _,address  := range addresses() {
+		fmt.Println(address)
 	}
 }
