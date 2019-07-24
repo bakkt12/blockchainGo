@@ -62,18 +62,22 @@ func runCLI() {
 	//cli.Send(from,to,amount)
 }
 
-func main() {
-
+func  checkNewWallet()  {
 	wallet := BLC.NewWallet()
 	address := wallet.Getaddress()
 	fmt.Printf("address %s \n", address)
 
 	isValid:= BLC.IsValidForAddress(address)
 	fmt.Printf("%s 这个地址为 %v\n",address,isValid)
-
-
-	//sli := []int{1,2,3,4,5}
-	//sli = sli[:]
-	//fmt.Println(sli)
+}
+func TestNewWallets()  {
+	wallets:= BLC.NewWallets()
+	fmt.Println(wallets)
+	wallets.CreateNewWallet()
+	wallets.CreateNewWallet()
+	fmt.Println(wallets)
+}
+func main() {
+	runCLI()
 
 }

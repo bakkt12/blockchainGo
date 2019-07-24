@@ -6,7 +6,6 @@ import (
 	"crypto/elliptic"
 	"crypto/rand"
 	"crypto/sha256"
-	"fmt"
 	"golang.org/x/crypto/ripemd160"
 	"log"
 )
@@ -30,16 +29,15 @@ func IsValidForAddress(address []byte) bool {
 	 */
 	version_public_checkSumBytes := Base58Decode(address)
 
-	fmt.Println(address)
-	fmt.Println(version_public_checkSumBytes)
-	//最后面4个字节（检查字节）
+	//fmt.Println(address)
+	//fmt.Println(version_public_checkSumBytes)
+	//最后面4个字节（检查字节）,从（总长度-4 ）到未尾
 	checkSumBytes := version_public_checkSumBytes[len(version_public_checkSumBytes)-addressChecksumLen:]
-	//前面21个字节（version+ ripem160)
+	//前面21个字节（version+ ripem160)，从0 到未尾倒数第4
 	versionRipemd160Bytes := version_public_checkSumBytes[:len(version_public_checkSumBytes)-addressChecksumLen]
 
-	fmt.Printf("%s\n",checkSumBytes)
-
-	fmt.Printf("%s\n",versionRipemd160Bytes)
+	//fmt.Printf("%s\n",checkSumBytes)
+	//fmt.Printf("%s\n",versionRipemd160Bytes)
 
 	checkBytes:=checksum(versionRipemd160Bytes)
 
@@ -85,7 +83,7 @@ func (w *Wallet) Ripemd160Hash() []byte {
 	return ripemd160.Sum(nil)
 }
 
-func NewWallet() *Wallet {
+func  NewWallet() *Wallet {
 	privateKey, publicKey := newKeyPair()
 	return &Wallet{privateKey, publicKey}
 }
