@@ -48,7 +48,7 @@ func IsValidForAddress(address []byte) bool {
 }
 func (w *Wallet) Getaddress() []byte {
 	//1.使用 RIPEMD160(SHA256(PubKey)) 哈希算法，取公钥并对其哈希两次
-	ripemd160Hash := w.Ripemd160Hash()
+	ripemd160Hash := Ripemd160Hash(w.PublicKey)
 
 	//2.给哈希加上地址生成算法版本的前缀
 	versionRipemd160Hash := append([]byte{version}, ripemd160Hash...)
@@ -71,10 +71,10 @@ func checksum(payload []byte) []byte {
 	return hash2[:addressChecksumLen]
 }
 
-func (w *Wallet) Ripemd160Hash() []byte {
+func Ripemd160Hash(publicKey []byte) []byte {
 	//1.先将 publickey  SHA256
 	sha256 := sha256.New()
-	sha256.Write([]byte(w.PublicKey))
+	sha256.Write([]byte(publicKey))
 	bytes := sha256.Sum(nil)
 
 	//2 再做 RIP160

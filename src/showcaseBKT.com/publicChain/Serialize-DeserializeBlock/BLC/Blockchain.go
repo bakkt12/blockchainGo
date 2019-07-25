@@ -60,13 +60,13 @@ func (blockchian *Blockchain) Printchain() {
 			fmt.Println("\t-------Vins:")
 			for _, in := range transcation.Vins {
 				fmt.Printf("\tvin txid        :%x\n", in.TxHash)
-				fmt.Printf("\tvin ScriptPubKey:%s\n", in.ScriptSig)
+				fmt.Printf("\tvin ScriptPubKey:%s\n", in.PublicKey)
 				fmt.Printf("\tvin voutIndex   :%d\n", in.VoutIndex)
 			}
 
 			fmt.Println("\t--------Vouts:")
 			for _, out := range transcation.Vouts {
-				fmt.Printf("\tvout ScriptPubKey:%s\n", out.ScriptPubKey)
+				fmt.Printf("\tvout ScriptPubKey:%s\n", out.Ripemd160Hash)
 				fmt.Printf("\tvout amount      :%d\n", out.Value)
 			}
 			fmt.Println("**************************")
@@ -94,7 +94,11 @@ func (blockchain *Blockchain) UnUTXOs(address string, txs []*Transcation) []*UTX
 	for _, tx := range txs {
 		if tx.IsCoinbaseTransaction() == false {
 			for _, in := range tx.Vins {
-				if in.UnLockWithAddress(address) {
+				//公钥hash
+				publicKey := Base58Decode([]byte(address))
+				ripemd160hash := publicKey[1 : len(publicKey)-4]
+
+				if in.UnlockRipedm160Hash(ripemd160hash) {
 					fmt.Println("打印所有txs ,tx hash- in hash-inindex:", hex.EncodeToString(tx.TxHash), ",in hash", hex.EncodeToString(in.TxHash), in.VoutIndex);
 				}
 			}
@@ -105,7 +109,11 @@ func (blockchain *Blockchain) UnUTXOs(address string, txs []*Transcation) []*UTX
 		if tx.IsCoinbaseTransaction() == false {
 			for _, in := range tx.Vins {
 				//是否能够解锁
-				if in.UnLockWithAddress(address) {
+				//公钥hash
+				publicKey := Base58Decode([]byte(address))
+				ripemd160hash := publicKey[1 : len(publicKey)-4]
+
+				if in.UnlockRipedm160Hash(ripemd160hash) {
 					key := hex.EncodeToString(in.TxHash)
 					spentTXOutputs[key] = append(spentTXOutputs[key], in.VoutIndex)
 				}
@@ -115,7 +123,7 @@ func (blockchain *Blockchain) UnUTXOs(address string, txs []*Transcation) []*UTX
 	fmt.Println("=======每个Txs中 已消费的 output===============")
 	for key, indexArray := range spentTXOutputs {
 		for _, voutIndex := range indexArray {
-			fmt.Println("已消费的output key - index:", key , voutIndex);
+			fmt.Println("已消费的output key - index:", key, voutIndex);
 		}
 	}
 
@@ -126,7 +134,7 @@ func (blockchain *Blockchain) UnUTXOs(address string, txs []*Transcation) []*UTX
 			if out.UnLockScriptPubKeyWithAddress(address) {
 				if len(spentTXOutputs) == 0 {
 					utxo := &UTXO{tx.TxHash, index, out}
-					fmt.Println("inser进UTXOs  len(spentTXOutputs) == 0 :",hex.EncodeToString(tx.TxHash) , index, out);
+					fmt.Println("inser进UTXOs  len(spentTXOutputs) == 0 :", hex.EncodeToString(tx.TxHash), index, out);
 					unUTXOs = append(unUTXOs, utxo)
 				} else {
 					var isSpentUTXO bool
@@ -137,9 +145,9 @@ func (blockchain *Blockchain) UnUTXOs(address string, txs []*Transcation) []*UTX
 								continue Work1
 							}
 						}
-					}// end spentTXOutputs
+					} // end spentTXOutputs
 					if isSpentUTXO == false {
-						fmt.Println("inser进UTXOs  ok",hex.EncodeToString(tx.TxHash) , index, out);
+						fmt.Println("inser进UTXOs  ok", hex.EncodeToString(tx.TxHash), index, out);
 						utxo := &UTXO{tx.TxHash, index, out}
 						unUTXOs = append(unUTXOs, utxo)
 					}
@@ -155,8 +163,10 @@ func (blockchain *Blockchain) UnUTXOs(address string, txs []*Transcation) []*UTX
 			tx := block.Txs[i]
 			if tx.IsCoinbaseTransaction() == false {
 				for _, in := range tx.Vins {
-					//是否能够解锁
-					if in.UnLockWithAddress(address) {
+					//是否能够解锁 	//公钥hash
+					publicKey := Base58Decode([]byte(address))
+					ripemd160hash := publicKey[1 : len(publicKey)-4]
+					if in.UnlockRipedm160Hash(ripemd160hash) {
 						//将transcation id(byte array) 转成string
 						key := hex.EncodeToString(in.TxHash)
 						spentTXOutputs[key] = append(spentTXOutputs[key], in.VoutIndex)
@@ -186,12 +196,12 @@ func (blockchain *Blockchain) UnUTXOs(address string, txs []*Transcation) []*UTX
 							if isSpentUTXO == false {
 								utxo := &UTXO{tx.TxHash, index, out}
 								unUTXOs = append(unUTXOs, utxo)
-								fmt.Println("inser进UTXOs21",hex.EncodeToString(tx.TxHash) , index, out);
+								fmt.Println("inser进UTXOs21", hex.EncodeToString(tx.TxHash), index, out);
 							}
 						} else {
 							utxo := &UTXO{tx.TxHash, index, out}
 							unUTXOs = append(unUTXOs, utxo)
-							fmt.Println("inser进UTXOs2",hex.EncodeToString(tx.TxHash) , index, out);
+							fmt.Println("inser进UTXOs2", hex.EncodeToString(tx.TxHash), index, out);
 						}
 					}
 				}
@@ -208,9 +218,9 @@ func (blockchain *Blockchain) UnUTXOs(address string, txs []*Transcation) []*UTX
 	}
 
 	for _, outx := range unUTXOs {
-		fmt.Println("最后返回outx:",outx.Index,hex.EncodeToString(outx.TxHash),outx.OutPut)
+		fmt.Println("最后返回outx:", outx.Index, hex.EncodeToString(outx.TxHash), outx.OutPut)
 	}
-fmt.Println("")
+	fmt.Println("")
 
 	return unUTXOs
 }

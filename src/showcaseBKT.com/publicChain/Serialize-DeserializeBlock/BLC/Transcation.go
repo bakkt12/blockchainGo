@@ -60,11 +60,11 @@ func NewCoinbaseTransaction(address string) *Transcation {
 	fmt.Sprintf("NewCoinbaseTransaction to '%s'", address)
 
 	//创建创世的输入
-	txin := &TXInput{[]byte{}, -1, "Genesis Data"}
+	txin := &TXInput{[]byte{}, -1, nil,[]byte{}}
 	//创建输出
-	txout := &TXOutput{subsildy, address}
+	txout := NewTXOutput(50,address)
 	//创建交易
-	tx := Transcation{nil, []*TXInput{txin}, []*TXOutput{txout}}
+	tx := Transcation{[]byte{}, []*TXInput{txin}, []*TXOutput{txout}}
 	tx.HashTransaction()
 	return &tx
 }
@@ -75,6 +75,10 @@ func NewSimpleTransaction(from string, to string, amount int, blockchain *Blockc
 	fmt.Printf("Create a new transaction from:%s -> to:%s, amount:%d \n",from,to,amount)
 	//1.找到有效的可用的交易输出数据模型
 	//查询出未花费的输出  (int,map[string][]int)
+
+	//钱包获取 原生公钥
+	wallets,_:=NewWallets()
+	wallet:=wallets.GetWallet(from)
 
 	money, spendableUTXODic := blockchain.FindSpendableUTXOS(from, amount,txs)
 	fmt.Printf(" ===>from:%s 可用 monety:%d \n",from,money)
@@ -88,17 +92,17 @@ func NewSimpleTransaction(from string, to string, amount int, blockchain *Blockc
 	for txHash, indexArray := range spendableUTXODic {
 		txHashBytes, _ := hex.DecodeString(txHash)
 		for _, index := range indexArray {
-			txIntput := &TXInput{txHashBytes, index, from}
+			txIntput := &TXInput{txHashBytes, index, nil,wallet.PublicKey}
 			txIntputs = append(txIntputs, txIntput)
 		}
 	}
 
 	//建立输出转帐
-	txOutput := &TXOutput{int64(amount), to}
+	txOutput := NewTXOutput(int64(amount), to)
 	txOutputs = append(txOutputs, txOutput)
 
 	//建立输出，找零
-	txOutput = &TXOutput{int64(money) - int64(amount), from}
+	txOutput = NewTXOutput(int64(money) - int64(amount), from)
 	txOutputs = append(txOutputs, txOutput)
 
 	//创建交易
