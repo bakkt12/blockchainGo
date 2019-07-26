@@ -6,6 +6,7 @@ import (
 	"crypto/elliptic"
 	"crypto/rand"
 	"crypto/sha256"
+	"fmt"
 	"golang.org/x/crypto/ripemd160"
 	"log"
 )
@@ -27,8 +28,9 @@ func IsValidForAddress(address []byte) bool {
 	00       62E907B15CBF27D5425399EBF6F0FB50EBB88F18  C29B7D93
 
 	 */
+	 fmt.Printf("chcek valid address %s: \n", address)
 	version_public_checkSumBytes := Base58Decode(address)
-
+	fmt.Printf ("version_public_checkSumBytes: %s ,len:%d \n",(version_public_checkSumBytes) ,len(version_public_checkSumBytes))
 	//fmt.Println(address)
 	//fmt.Println(version_public_checkSumBytes)
 	//最后面4个字节（检查字节）,从（总长度-4 ）到未尾
