@@ -110,6 +110,10 @@ func NewSimpleTransaction(from string, to string, amount int, blockchain *Blockc
 
 	//设置hash值
 	tx.HashTransaction()
+
+	//进行签名
+
+
 	return tx
 }
 
