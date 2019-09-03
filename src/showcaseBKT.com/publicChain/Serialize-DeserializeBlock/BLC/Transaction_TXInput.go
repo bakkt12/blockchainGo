@@ -13,6 +13,7 @@ type TXInput struct {
 	VoutIndex int    //2.存储Txoutput在TXOutput中的索引
 	//3 交易解锁脚本 btc中解锁脚本由签名和公钥组成
 	//解锁脚本(scriptSig)   <sign> <PubK>
+	//--->包含付款人对本次交易的签名(<sig>)和付款人公钥(<PubK(A)>)。
 	Signature []byte //数字签名
 	PublicKey []byte // 公钥  原生的，没有加密的
 }

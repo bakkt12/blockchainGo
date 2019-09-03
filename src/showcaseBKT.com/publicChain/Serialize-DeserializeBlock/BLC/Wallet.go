@@ -28,9 +28,9 @@ func IsValidForAddress(address []byte) bool {
 	00       62E907B15CBF27D5425399EBF6F0FB50EBB88F18  C29B7D93
 
 	 */
-	 fmt.Printf("chcek valid address %s: \n", address)
+	fmt.Printf("开始检查地址: %s\n", address)
 	version_public_checkSumBytes := Base58Decode(address)
-	fmt.Printf ("version_public_checkSumBytes: %s ,len:%d \n",(version_public_checkSumBytes) ,len(version_public_checkSumBytes))
+	//fmt.Printf("version_public_checkSumBytes: %c ,len:%d \n", (version_public_checkSumBytes), len(version_public_checkSumBytes))
 	//fmt.Println(address)
 	//fmt.Println(version_public_checkSumBytes)
 	//最后面4个字节（检查字节）,从（总长度-4 ）到未尾
@@ -41,11 +41,13 @@ func IsValidForAddress(address []byte) bool {
 	//fmt.Printf("%s\n",checkSumBytes)
 	//fmt.Printf("%s\n",versionRipemd160Bytes)
 
-	checkBytes:=checksum(versionRipemd160Bytes)
+	checkBytes := checksum(versionRipemd160Bytes)
 
-	if bytes.Compare(checkSumBytes,checkBytes) ==0 {
+	if bytes.Compare(checkSumBytes, checkBytes) == 0 {
+		fmt.Println("检查地址合法......")
 		return true
 	}
+	fmt.Println("检查地址【不合法】  请再次确定检查......")
 	return false;
 }
 func (w *Wallet) Getaddress() []byte {
@@ -85,7 +87,7 @@ func Ripemd160Hash(publicKey []byte) []byte {
 	return ripemd160.Sum(nil)
 }
 
-func  NewWallet() *Wallet {
+func NewWallet() *Wallet {
 	privateKey, publicKey := newKeyPair()
 	return &Wallet{privateKey, publicKey}
 }

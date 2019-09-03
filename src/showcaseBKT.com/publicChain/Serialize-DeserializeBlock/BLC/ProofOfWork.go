@@ -34,7 +34,7 @@ func (pow *ProofOfWork) prepareData(nonce int) []byte {
 }
 
 func (pow *ProofOfWork) Run() (int, []byte) {
-	fmt.Printf("Start Mining the block .... \n ")
+	fmt.Printf("开始努力的挖矿.... \n ")
 	var hashInt big.Int
 	var hash [32]byte
 	nonce := 0;
@@ -52,7 +52,7 @@ func (pow *ProofOfWork) Run() (int, []byte) {
 			nonce++
 		}
 	}
-	fmt.Printf("  found nonce...%d   ", nonce)
+	fmt.Printf("太好了 挖矿成功 找到nonce值...%d   ", nonce)
 
 	return nonce, hash[:];
 }

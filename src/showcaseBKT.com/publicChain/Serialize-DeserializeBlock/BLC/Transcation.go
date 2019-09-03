@@ -2,6 +2,8 @@ package BLC
 
 import (
 	"bytes"
+	"crypto/ecdsa"
+	"crypto/rand"
 	"crypto/sha256"
 	"encoding/gob"
 	"encoding/hex"
@@ -51,72 +53,6 @@ func (tx *Transcation) IsCoinbaseTransaction() bool {
 	return tx.Vins[0].VoutIndex == -1 && len(tx.Vins[0].TxHash) == 0
 }
 
-
-
-//1. Transaction 创建分两种情况
-//1. 创世区块创建时的Transaction
-func NewCoinbaseTransaction(address string) *Transcation {
-
-	fmt.Sprintf("NewCoinbaseTransaction to '%s'", address)
-
-	//创建创世的输入
-	txin := &TXInput{[]byte{}, -1, nil,[]byte{}}
-	//创建输出
-	txout := NewTXOutput(50,address)
-	//创建交易
-	tx := Transcation{[]byte{}, []*TXInput{txin}, []*TXOutput{txout}}
-	tx.HashTransaction()
-	return &tx
-}
-
-//建立交易
-//2. 转账时产生的Transaction
-func NewSimpleTransaction(from string, to string, amount int, blockchain *Blockchain,txs []*Transcation) *Transcation {
-	fmt.Printf("Create a new transaction from:%s -> to:%s, amount:%d \n",from,to,amount)
-	//1.找到有效的可用的交易输出数据模型
-	//查询出未花费的输出  (int,map[string][]int)
-
-	//钱包获取 原生公钥
-	wallets,_:=NewWallets()
-	wallet:=wallets.GetWallet(from)
-
-	money, spendableUTXODic := blockchain.FindSpendableUTXOS(from, amount,txs)
-	fmt.Printf(" ===>from:%s 可用 monety:%d \n",from,money)
-
-	//输入
-	var txIntputs []*TXInput
-
-	//输出
-	var txOutputs []*TXOutput
-
-	for txHash, indexArray := range spendableUTXODic {
-		txHashBytes, _ := hex.DecodeString(txHash)
-		for _, index := range indexArray {
-			txIntput := &TXInput{txHashBytes, index, nil,wallet.PublicKey}
-			txIntputs = append(txIntputs, txIntput)
-		}
-	}
-
-	//建立输出转帐
-	txOutput := NewTXOutput(int64(amount), to)
-	txOutputs = append(txOutputs, txOutput)
-
-	//建立输出，找零
-	txOutput = NewTXOutput(int64(money) - int64(amount), from)
-	txOutputs = append(txOutputs, txOutput)
-
-	//创建交易
-	tx := &Transcation{[]byte{}, txIntputs, txOutputs}
-
-	//设置hash值
-	tx.HashTransaction()
-
-	//进行签名
-
-
-	return tx
-}
-
 //设置交易 hash，将 tx交易序列化之后字节数组生成256Hash
 func (tx *Transcation) HashTransaction() {
 	var encoded bytes.Buffer;
@@ -127,4 +63,136 @@ func (tx *Transcation) HashTransaction() {
 	}
 	hash := sha256.Sum256(encoded.Bytes())
 	tx.TxHash = hash[:]
+}
+
+//1. Transaction 创建分两种情况
+//1. 创世区块创建时的Transaction
+func NewCoinbaseTransaction(address string) *Transcation {
+
+	fmt.Sprintf("NewCoinbaseTransaction to '%s'", address)
+
+	//创建创世的输入
+	txin := &TXInput{[]byte{}, -1, nil, []byte{}}
+	//创建输出
+	txout := NewTXOutput(50, address)
+	//创建交易
+	tx := Transcation{[]byte{}, []*TXInput{txin}, []*TXOutput{txout}}
+	tx.HashTransaction()
+	return &tx
+}
+
+//建立交易
+//2. 转账时产生的Transaction
+func NewSimpleTransaction(from string, to string, amount int, blockchain *Blockchain, txs []*Transcation) *Transcation {
+	fmt.Printf("Create a new transaction from:%s -> to:%s, amount:%d \n", from, to, amount)
+	//1.找到有效的可用的交易输出数据模型
+	//查询出未花费的输出  (int,map[string][]int)
+
+	//钱包获取 原生公钥
+	wallets, _ := NewWallets()
+	wallet := wallets.GetWallet(from)
+
+	money, spendableUTXODic := blockchain.FindSpendableUTXOS(from, amount, txs)
+	fmt.Printf(" ===>from:%s 可用 monety:%d \n", from, money)
+
+	//输入
+	var txIntputs []*TXInput
+
+	//输出
+	var txOutputs []*TXOutput
+
+	for txHash, indexArray := range spendableUTXODic {
+		txHashBytes, _ := hex.DecodeString(txHash)
+		for _, index := range indexArray {
+			txIntput := &TXInput{txHashBytes, index, nil, wallet.PublicKey}
+			txIntputs = append(txIntputs, txIntput)
+		}
+	}
+
+	//建立输出转帐
+	txOutput := NewTXOutput(int64(amount), to)
+	txOutputs = append(txOutputs, txOutput)
+
+	//建立输出，找零
+	txOutput = NewTXOutput(int64(money)-int64(amount), from)
+	txOutputs = append(txOutputs, txOutput)
+
+	//创建交易
+	tx := &Transcation{[]byte{}, txIntputs, txOutputs}
+
+	//设置hash值
+	tx.HashTransaction()
+
+	//进行签名
+	//blockchain.SignTranscation()
+
+	return tx
+}
+
+//方法接受一个私钥和一个之前交易的 map
+func (tx *Transcation) Sign(privKey ecdsa.PrivateKey, prevTXs map[string]Transcation) {
+	if (tx.IsCoinbaseTransaction()) {
+		return
+	}
+
+	txCopy := tx.TrimmedCopy()
+	//每一个输入都是分开签名，交易中可以是包含不同地址的输入
+
+	//接下来，我们检查每个输入中的签名
+	for inID, vin := range txCopy.Vins {
+		//找到input对应的是上一个transcation,
+		prevTx := prevTXs[hex.EncodeToString(vin.TxHash)]
+		txCopy.Vins[inID].Signature = nil
+		//PubKey 被设置为所引用输出的 PubKeyHash
+		txCopy.Vins[inID].PublicKey = prevTx.Vouts[vin.VoutIndex].Ripemd160Hash
+		// 方法对交易进行序列化，并使用 SHA-256 算法进行哈希
+		//哈希后的结果就是我们要签名的数据
+		txCopy.TxHash = txCopy.Hash()
+		//重置为null不影响后面的迭代
+		txCopy.Vins[inID].PublicKey=nil
+
+		//通过 privKey 对 txCopy.ID 进行签名。一个 ECDSA 签名就是一对数字，
+		// 我们对这对数字连接起来，并存储在输入的 Signature 字段。
+		r,s,err:=ecdsa.Sign(rand.Reader,&privKey,txCopy.TxHash)
+		if err!=nil{
+			log.Panic(err)
+		}
+		signature:=append(r.Bytes(),s.Bytes()...)
+		tx.Vins[inID].Signature = signature
+
+
+	}
+}
+
+func (tx *Transcation) Hash() [] byte {
+	txCopy := tx
+	txCopy.TxHash = []byte{}
+	hash := sha256.Sum256(tx.Serialize())
+	return hash[:]
+}
+
+func (tx *Transcation) Serialize() []byte {
+	var encoded bytes.Buffer
+	enc := gob.NewEncoder(&encoded)
+	err := enc.Encode(tx)
+	if err != nil {
+		log.Panic(err)
+	}
+	return encoded.Bytes()
+}
+
+/**
+复制一份交易，但input里的公钥和签名设置为null
+ */
+func (tx *Transcation) TrimmedCopy() Transcation {
+	var inputs []*TXInput
+	var outputs []*TXOutput
+	for _, vin := range tx.Vins {
+		inputs = append(inputs, &TXInput{vin.TxHash, vin.VoutIndex, nil, nil})
+	}
+	for _, vout := range tx.Vouts {
+		outputs = append(outputs, &TXOutput{vout.Value, vout.Ripemd160Hash})
+	}
+	txCopy := Transcation{tx.TxHash, inputs, outputs}
+	return txCopy
 }

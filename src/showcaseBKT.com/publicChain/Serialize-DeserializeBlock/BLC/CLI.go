@@ -27,7 +27,7 @@ func (cli *CLI) printUsage() {
 	fmt.Println("\tcreatewallet		\t--创建钱包")
 	fmt.Println("\tcreateblockchain \t-address \"创建创世区块的地址...\"")
 	fmt.Println("\tgetbalance			\t-address  \"要查询某一个账号的余额......\".")
-	fmt.Println("\tprintf				\t-print 输出所有区块的数据.........")
+	fmt.Println("\tprintf				\t 输出所有区块的数据.........")
 	fmt.Println("\tsend				\t-from \"转账源地址...\" -to \"转账目的地地址...\"  -amount \"转账金额......\"")
 }
 
@@ -130,9 +130,9 @@ func (cli *CLI) Run() {
 	}
 
 	if getbalanceCmd.Parsed() {
-		fmt.Printf("开始查询%s地址余额........\n", *getbalanceWithAdress)
+		fmt.Printf("[CLI] 开始查询 %s 地址余额........\n", *getbalanceWithAdress)
 		if IsValidForAddress([]byte(*getbalanceWithAdress )) == false {
-			fmt.Println("查询地址无效....")
+			fmt.Println("[CLI] 查询地址无效....")
 			//cli.printUsage()
 			os.Exit(1)
 		}

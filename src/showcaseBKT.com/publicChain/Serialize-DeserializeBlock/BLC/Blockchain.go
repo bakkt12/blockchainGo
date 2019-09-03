@@ -1,6 +1,8 @@
 package BLC
 
 import (
+	"bytes"
+	"crypto/ecdsa"
 	"encoding/hex"
 	"fmt"
 	"github.com/boltdb/bolt"
@@ -47,31 +49,32 @@ func (blockchian *Blockchain) Printchain() {
 	for {
 		block := blockchainIterator.Next()
 		//fmt.Println(block)
-		fmt.Println("============START==============================")
-		fmt.Printf("Height：:%d \n", block.Height)
-		fmt.Printf("PrevBlockHash:%x \n", block.PrevBlockHash)
+		//fmt.Println("============START==============================")
 		fmt.Printf("Hash			:%x \n", block.Hash)
+		fmt.Printf("PrevBlockHash:%x \n", block.PrevBlockHash)
+		fmt.Printf("Height：:%d \n", block.Height)
 		//fmt.Printf("Timestamp		:%s \n", time.Unix(block.Timestamp, 0).Format("2006-01-02 15:04:05"))
 		//fmt.Printf("Nonce			:%d \n", block.Nonce)
 
 		for _, transcation := range block.Txs {
-			fmt.Println("**************************")
-			fmt.Printf("####txid:		%x\n", transcation.TxHash)
-			fmt.Println("\t-------Vins:")
+			//fmt.Println("**************************")
+			fmt.Printf("####交易id:		%x\n", transcation.TxHash)
+			//fmt.Println("\t-------Vins:")
 			for _, in := range transcation.Vins {
 				fmt.Printf("\tvin txid        :%x\n", in.TxHash)
-				fmt.Printf("\tvin ScriptPubKey:%s\n", in.PublicKey)
 				fmt.Printf("\tvin voutIndex   :%d\n", in.VoutIndex)
+				fmt.Printf("\tvin 付款人的公钥:%x\n", in.PublicKey)
+				fmt.Printf("\tvin 签名:%x\n", in.Signature)
 			}
 
-			fmt.Println("\t--------Vouts:")
+		//	fmt.Println("\t--------Vouts:")
 			for _, out := range transcation.Vouts {
-				fmt.Printf("\tvout ScriptPubKey:%s\n", out.Ripemd160Hash)
-				fmt.Printf("\tvout amount      :%d\n", out.Value)
+				fmt.Printf("\tvout 收款人的公钥:%x\n",( out.Ripemd160Hash))
+				fmt.Printf("\tvout 收款的金额数量      :%d\n", out.Value)
 			}
-			fmt.Println("**************************")
+		//	fmt.Println("**************************")
 		}
-
+		fmt.Println("")
 		var hashBigInt big.Int
 		//是否到达创世区块
 		hashBigInt.SetBytes(block.PrevBlockHash)
@@ -90,7 +93,7 @@ func (blockchain *Blockchain) UnUTXOs(address string, txs []*Transcation) []*UTX
 	var unUTXOs []*UTXO
 	//某个 tx 对应它已消费的input的VoutIndex, 001->int{0,1}
 	spentTXOutputs := make(map[string][]int)
-	fmt.Println("=======打印所有txs===========================")
+	fmt.Printf("开始计算%s 地址对应的未花费的TXO\n",address)
 	for _, tx := range txs {
 		if tx.IsCoinbaseTransaction() == false {
 			for _, in := range tx.Vins {
@@ -120,7 +123,7 @@ func (blockchain *Blockchain) UnUTXOs(address string, txs []*Transcation) []*UTX
 			}
 		}
 	}
-	fmt.Println("=======每个Txs中 已消费的 output===============")
+	//fmt.Println("=======每个Txs中 已消费的 output===============")
 	for key, indexArray := range spentTXOutputs {
 		for _, voutIndex := range indexArray {
 			fmt.Println("已消费的output key - index:", key, voutIndex);
@@ -154,22 +157,27 @@ func (blockchain *Blockchain) UnUTXOs(address string, txs []*Transcation) []*UTX
 				}
 			} //end if
 		}
-	}
+	}//end range txs
+
 
 	blockIterator := blockchain.Iterator()
 	for {
 		block := blockIterator.Next()
 		for i := len(block.Txs) - 1; i >= 0; i-- {
 			tx := block.Txs[i]
+
 			if tx.IsCoinbaseTransaction() == false {
+
 				for _, in := range tx.Vins {
 					//是否能够解锁 	//公钥hash
 					publicKey := Base58Decode([]byte(address))
 					ripemd160hash := publicKey[1 : len(publicKey)-4]
+
 					if in.UnlockRipedm160Hash(ripemd160hash) {
 						//将transcation id(byte array) 转成string
 						key := hex.EncodeToString(in.TxHash)
 						spentTXOutputs[key] = append(spentTXOutputs[key], in.VoutIndex)
+
 					}
 				}
 			} //end if
@@ -178,7 +186,9 @@ func (blockchain *Blockchain) UnUTXOs(address string, txs []*Transcation) []*UTX
 		work:
 			for index, out := range tx.Vouts {
 				//是否已经被花费
+
 				if out.UnLockScriptPubKeyWithAddress(address) {
+
 					if spentTXOutputs != nil {
 						if len(spentTXOutputs) != 0 {
 							//key->[]index
@@ -196,14 +206,15 @@ func (blockchain *Blockchain) UnUTXOs(address string, txs []*Transcation) []*UTX
 							if isSpentUTXO == false {
 								utxo := &UTXO{tx.TxHash, index, out}
 								unUTXOs = append(unUTXOs, utxo)
-								fmt.Println("inser进UTXOs21", hex.EncodeToString(tx.TxHash), index, out);
 							}
 						} else {
 							utxo := &UTXO{tx.TxHash, index, out}
 							unUTXOs = append(unUTXOs, utxo)
-							fmt.Println("inser进UTXOs2", hex.EncodeToString(tx.TxHash), index, out);
+
 						}
 					}
+				}else{
+
 				}
 			} //end Vouts for
 		} //end tx for
@@ -215,12 +226,11 @@ func (blockchain *Blockchain) UnUTXOs(address string, txs []*Transcation) []*UTX
 		if (hashBigInt.Cmp(big.NewInt(0)) == 0) {
 			break;
 		}
-	}
+	} // end for
 
 	for _, outx := range unUTXOs {
-		fmt.Println("最后返回outx:", outx.Index, hex.EncodeToString(outx.TxHash), outx.OutPut)
+		fmt.Printf ("打印未花费的UTXO index:%d ,TxHash %x\n:", outx.Index, (outx.TxHash))
 	}
-	fmt.Println("")
 
 	return unUTXOs
 }
@@ -263,7 +273,6 @@ func (blockchain *Blockchain) MineNewBlock(from []string, to []string, amount []
 	var txs []*Transcation
 	for index, address := range from {
 		value, _ := strconv.Atoi(amount[index])
-
 		tx := NewSimpleTransaction(address, to[index], value, blockchain, txs)
 		txs = append(txs, tx)
 	}
@@ -338,7 +347,7 @@ func CreateBlockchainWithGenesisBlock(genesisAddress string) *Blockchain {
 		fmt.Println("创世区块已经存在.......")
 		os.Exit(1)
 	}
-	fmt.Println("正在创建创世区块.......")
+
 
 	//return &Blockchain{[]*Block{NewGenesisBlock()}}
 	//1.尝试打开或是创建数据库
@@ -358,7 +367,8 @@ func CreateBlockchainWithGenesisBlock(genesisAddress string) *Blockchain {
 
 		//表不存
 		if b == nil {
-			fmt.Println(" No existing blockchain found. create a new one.")
+			//fmt.Println(" No existing blockchain found. create a new one.")
+			fmt.Println("正在创建创世区块.......")
 			//表不存认为区块为空，需要首次创建创世区块
 
 			//创建创世区块的交易对象
@@ -404,8 +414,47 @@ func (blockchain *Blockchain) GetBalance(address string) int64 {
 	utxos := blockchain.UnUTXOs(address, []*Transcation{})
 	var amount int64
 	for _, utxo := range utxos {
-		fmt.Println(utxo.TxHash, utxo.Index, utxo.OutPut.Value)
+		//fmt.Println(utxo.TxHash, utxo.Index, utxo.OutPut.Value)
 		amount = amount + utxo.OutPut.Value
 	}
 	return amount
+}
+
+func (blockchain *Blockchain) SignTranscation(tx *Transcation, privKey ecdsa.PrivateKey) {
+
+	if tx.IsCoinbaseTransaction() {
+		return
+	}
+
+	//vin 所对应的 交易集
+	prevTXs := make(map[string]Transcation)
+	for _, vin := range tx.Vins {
+		prevTX, err := blockchain.FindTransction(vin.TxHash)
+		if err != nil {
+			log.Panic(err)
+		}
+		prevTXs[hex.EncodeToString(prevTX.TxHash)] = prevTX
+	}
+	tx.Sign(privKey, prevTXs)
+}
+//通过 ID 找到一笔交易（这需要在区块链上迭代所有区块）
+func (bc *Blockchain) FindTransction(ID []byte) (Transcation, error) {
+	bci := bc.Iterator()
+
+	for {
+		block := bci.Next()
+		for _, tx := range block.Txs {
+			if bytes.Compare(tx.TxHash, ID) == 0 {
+				return *tx, nil
+			}
+		}
+
+		var hashInt big.Int
+		hashInt.SetBytes(block.PrevBlockHash)
+		if big.NewInt(0).Cmp(&hashInt) == 0 {
+			break;
+		}
+	}
+
+	return Transcation{}, nil
 }
