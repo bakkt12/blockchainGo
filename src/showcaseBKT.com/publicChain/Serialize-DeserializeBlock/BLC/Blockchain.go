@@ -50,9 +50,9 @@ func (blockchian *Blockchain) Printchain() {
 		block := blockchainIterator.Next()
 		//fmt.Println(block)
 		//fmt.Println("============START==============================")
-		fmt.Printf("Hash			:%x \n", block.Hash)
-		fmt.Printf("PrevBlockHash:%x \n", block.PrevBlockHash)
-		fmt.Printf("Height：:%d \n", block.Height)
+		fmt.Printf("Hash :%x \n", block.Hash)
+		fmt.Printf("PrevBlockHash:%x\n", block.PrevBlockHash)
+		fmt.Printf("Height:%d \n", block.Height)
 		//fmt.Printf("Timestamp		:%s \n", time.Unix(block.Timestamp, 0).Format("2006-01-02 15:04:05"))
 		//fmt.Printf("Nonce			:%d \n", block.Nonce)
 
