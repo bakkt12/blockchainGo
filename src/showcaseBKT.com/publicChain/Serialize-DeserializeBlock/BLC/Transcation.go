@@ -125,7 +125,6 @@ func NewSimpleTransaction(from string, to string, amount int, blockchain *Blockc
 
 	//进行签名
 	blockchain.SignTranscation(tx,wallet.PrivateKey)
-
 	return tx
 }
 

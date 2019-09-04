@@ -273,6 +273,8 @@ func (blockchain *Blockchain) MineNewBlock(from []string, to []string, amount []
 	var txs []*Transcation
 	for index, address := range from {
 		value, _ := strconv.Atoi(amount[index])
+
+		//创建Transcation时就应设置数字签名
 		tx := NewSimpleTransaction(address, to[index], value, blockchain, txs)
 		txs = append(txs, tx)
 	}
