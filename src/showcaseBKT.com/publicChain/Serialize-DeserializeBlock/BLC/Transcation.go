@@ -93,7 +93,7 @@ func NewSimpleTransaction(from string, to string, amount int, blockchain *Blockc
 	wallet := wallets.GetWallet(from)
 
 	money, spendableUTXODic := blockchain.FindSpendableUTXOS(from, amount, txs)
-	fmt.Printf(" ===>from:%s 可用 monety:%d \n", from, money)
+	fmt.Printf("[Transcation.go]>from:%s 找到可用 monety:%d \n", from, money)
 
 	//输入
 	var txIntputs []*TXInput
@@ -124,7 +124,7 @@ func NewSimpleTransaction(from string, to string, amount int, blockchain *Blockc
 	tx.HashTransaction()
 
 	//进行签名
-	//blockchain.SignTranscation()
+	blockchain.SignTranscation(tx,wallet.PrivateKey)
 
 	return tx
 }
@@ -149,18 +149,16 @@ func (tx *Transcation) Sign(privKey ecdsa.PrivateKey, prevTXs map[string]Transca
 		//哈希后的结果就是我们要签名的数据
 		txCopy.TxHash = txCopy.Hash()
 		//重置为null不影响后面的迭代
-		txCopy.Vins[inID].PublicKey=nil
+		txCopy.Vins[inID].PublicKey = nil
 
 		//通过 privKey 对 txCopy.ID 进行签名。一个 ECDSA 签名就是一对数字，
 		// 我们对这对数字连接起来，并存储在输入的 Signature 字段。
-		r,s,err:=ecdsa.Sign(rand.Reader,&privKey,txCopy.TxHash)
-		if err!=nil{
+		r, s, err := ecdsa.Sign(rand.Reader, &privKey, txCopy.TxHash)
+		if err != nil {
 			log.Panic(err)
 		}
-		signature:=append(r.Bytes(),s.Bytes()...)
+		signature := append(r.Bytes(), s.Bytes()...)
 		tx.Vins[inID].Signature = signature
-
-
 	}
 }
 

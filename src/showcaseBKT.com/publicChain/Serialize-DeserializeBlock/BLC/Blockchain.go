@@ -93,7 +93,7 @@ func (blockchain *Blockchain) UnUTXOs(address string, txs []*Transcation) []*UTX
 	var unUTXOs []*UTXO
 	//某个 tx 对应它已消费的input的VoutIndex, 001->int{0,1}
 	spentTXOutputs := make(map[string][]int)
-	fmt.Printf("开始计算%s 地址对应的未花费的TXO\n",address)
+	fmt.Printf("[Blockchain.go]开始计算%s 地址对应的未花费的TXO\n",address)
 	for _, tx := range txs {
 		if tx.IsCoinbaseTransaction() == false {
 			for _, in := range tx.Vins {
@@ -228,9 +228,9 @@ func (blockchain *Blockchain) UnUTXOs(address string, txs []*Transcation) []*UTX
 		}
 	} // end for
 
-	for _, outx := range unUTXOs {
-		fmt.Printf ("打印未花费的UTXO index:%d ,TxHash %x\n:", outx.Index, (outx.TxHash))
-	}
+	//for _, outx := range unUTXOs {
+	//	fmt.Printf ("打印未花费的UTXO index:%d ,TxHash %x\n:", outx.Index, (outx.TxHash))
+	//}
 
 	return unUTXOs
 }
@@ -257,7 +257,7 @@ func (blockchain *Blockchain) FindSpendableUTXOS(from string, amount int, txs []
 	} //end for
 
 	if value < int64(amount) {
-		fmt.Printf("%s 's fund is 不足\n", from)
+		fmt.Printf("[Blockchain.go] %s 转帐%d余额不足,帐户却只有%d !\n", from,amount,value)
 		os.Exit(1)
 	}
 	return value, spendableUTXO
@@ -437,6 +437,7 @@ func (blockchain *Blockchain) SignTranscation(tx *Transcation, privKey ecdsa.Pri
 	}
 	tx.Sign(privKey, prevTXs)
 }
+
 //通过 ID 找到一笔交易（这需要在区块链上迭代所有区块）
 func (bc *Blockchain) FindTransction(ID []byte) (Transcation, error) {
 	bci := bc.Iterator()

@@ -34,7 +34,7 @@ func (pow *ProofOfWork) prepareData(nonce int) []byte {
 }
 
 func (pow *ProofOfWork) Run() (int, []byte) {
-	fmt.Printf("开始努力的挖矿.... \n ")
+	fmt.Printf("开始努力的挖矿....>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> \n ")
 	var hashInt big.Int
 	var hash [32]byte
 	nonce := 0;
