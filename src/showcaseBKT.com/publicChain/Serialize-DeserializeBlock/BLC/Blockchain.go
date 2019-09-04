@@ -50,7 +50,7 @@ func (blockchian *Blockchain) Printchain() {
 		block := blockchainIterator.Next()
 		//fmt.Println(block)
 		//fmt.Println("============START==============================")
-		fmt.Printf("Hash :%x \n", block.Hash)
+		fmt.Printf("Hash:%x\n", block.Hash)
 		fmt.Printf("PrevBlockHash:%x\n", block.PrevBlockHash)
 		fmt.Printf("Height:%d \n", block.Height)
 		//fmt.Printf("Timestamp		:%s \n", time.Unix(block.Timestamp, 0).Format("2006-01-02 15:04:05"))
@@ -58,11 +58,11 @@ func (blockchian *Blockchain) Printchain() {
 
 		for _, transcation := range block.Txs {
 			//fmt.Println("**************************")
-			fmt.Printf("####交易id:		%x\n", transcation.TxHash)
+			fmt.Printf("####交易id:%x\n", transcation.TxHash)
 			//fmt.Println("\t-------Vins:")
 			for _, in := range transcation.Vins {
-				fmt.Printf("\tvin txid        :%x\n", in.TxHash)
-				fmt.Printf("\tvin voutIndex   :%d\n", in.VoutIndex)
+				fmt.Printf("\tvin txid:%x\n", in.TxHash)
+				fmt.Printf("\tvin voutIndex:%d\n", in.VoutIndex)
 				fmt.Printf("\tvin 付款人的公钥:%x\n", in.PublicKey)
 				fmt.Printf("\tvin 签名:%x\n", in.Signature)
 			}
@@ -70,7 +70,7 @@ func (blockchian *Blockchain) Printchain() {
 		//	fmt.Println("\t--------Vouts:")
 			for _, out := range transcation.Vouts {
 				fmt.Printf("\tvout 收款人的公钥:%x\n",( out.Ripemd160Hash))
-				fmt.Printf("\tvout 收款的金额数量      :%d\n", out.Value)
+				fmt.Printf("\tvout 收款的金额数量:%d\n", out.Value)
 			}
 		//	fmt.Println("**************************")
 		}
