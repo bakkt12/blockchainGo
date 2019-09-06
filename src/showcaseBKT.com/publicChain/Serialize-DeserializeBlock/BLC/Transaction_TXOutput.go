@@ -28,7 +28,6 @@ type TXOutput struct {
 func NewTXOutput(value int64, address string) *TXOutput {
 	txo := &TXOutput{value, nil}
 	txo.Lock([]byte(address))
-	//txo.Ripemd160Hash =TransAddressToPubKeyhash([]byte(address))
 	return txo
 }
 

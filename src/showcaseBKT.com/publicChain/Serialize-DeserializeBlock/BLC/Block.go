@@ -45,9 +45,8 @@ type Block struct {
 /**
   产生新的区块工厂方法，
 */
-func
-NewBlock(transcation []*Transcation,height int64, prevBlockHash []byte) *Block {
-	block := &Block{height,time.Now().Unix(), prevBlockHash, transcation, []byte{}, 0}
+func NewBlock(transcation []*Transcation, height int64, prevBlockHash []byte) *Block {
+	block := &Block{height, time.Now().Unix(), prevBlockHash, transcation, []byte{}, 0}
 	//将block作为参数 创建一个pow对象
 	pow := NewProofOfWork(block)
 
@@ -99,5 +98,5 @@ func DeserializeBlock(d []byte) *Block {
 
 //创建创世区块
 func NewGenesisBlock(conbase *Transcation) *Block {
-	return NewBlock([]*Transcation{conbase},1, []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
+	return NewBlock([]*Transcation{conbase}, 1, []byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
 }
