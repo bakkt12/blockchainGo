@@ -290,6 +290,12 @@ func (blockchain *Blockchain) MineNewBlock(from []string, to []string, amount []
 		}
 		return nil
 	})
+//在建立区块之前对交易Tx进行签名验证
+ for _,tx:=range txs{
+ 	if blockchain.verifyTranscation(tx) ==false {
+ 		log.Panic("打包前对区块交易进行签名验证失败！")
+	}
+ }
 
 	//2.创建区块
 	newBlock := NewBlock(txs, block.Height+1, block.Hash)
@@ -440,6 +446,20 @@ func (blockchain *Blockchain) SignTranscation(tx *Transcation, privKey ecdsa.Pri
 	tx.Sign(privKey, prevTXs)
 }
 
+func  (bc*Blockchain) verifyTranscation(tx *Transcation) bool{
+
+	prevTxs := make(map[string] Transcation)
+	for _,vin :=range tx.Vins{
+		prevTx,err:= bc.FindTransction(vin.TxHash)
+		if err!=nil{
+			log.Panic(err)
+		}
+		prevTxs[hex.EncodeToString(vin.TxHash)] = prevTx
+	}
+
+	return tx.Verify(prevTxs)
+
+}
 //通过 ID 找到一笔交易（这需要在区块链上迭代所有区块）
 func (bc *Blockchain) FindTransction(ID []byte) (Transcation, error) {
 	bci := bc.Iterator()

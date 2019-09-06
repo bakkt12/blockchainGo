@@ -3,12 +3,14 @@ package BLC
 import (
 	"bytes"
 	"crypto/ecdsa"
+	"crypto/elliptic"
 	"crypto/rand"
 	"crypto/sha256"
 	"encoding/gob"
 	"encoding/hex"
 	"fmt"
 	"log"
+	"math/big"
 )
 
 const subsildy = 50
@@ -124,7 +126,7 @@ func NewSimpleTransaction(from string, to string, amount int, blockchain *Blockc
 	tx.HashTransaction()
 
 	//进行签名
-	blockchain.SignTranscation(tx,wallet.PrivateKey)
+	blockchain.SignTranscation(tx, wallet.PrivateKey)
 	return tx
 }
 
@@ -159,6 +161,47 @@ func (tx *Transcation) Sign(privKey ecdsa.PrivateKey, prevTXs map[string]Transca
 		signature := append(r.Bytes(), s.Bytes()...)
 		tx.Vins[inID].Signature = signature
 	}
+}
+
+func (tx *Transcation) Verify(prevTXs map[string]Transcation) bool {
+	fmt.Printf("开始验证 tx:%x\n",tx.TxHash)
+	if tx.IsCoinbaseTransaction() {
+		return true
+	}
+	txCopy := tx.TrimmedCopy()
+	//Next, we’ll need the same curve that is used to generate key pairs:
+	//椭圆曲线
+	curve := elliptic.P256()
+
+	//检查每个在input中的签名
+	for inID, vin := range tx.Vins {
+
+		prevTx := prevTXs[hex.EncodeToString(vin.TxHash)]
+		txCopy.Vins[inID].Signature = nil
+		txCopy.Vins[inID].PublicKey = prevTx.Vouts[vin.VoutIndex].Ripemd160Hash
+		txCopy.TxHash = txCopy.Hash()
+		txCopy.Vins[inID].PublicKey = nil
+		//将TXI的Signature和PubKey中的数据进行“拆包”，用于crypto/ecdsa库进行验证使用
+		r := big.Int{}
+		s := big.Int{}
+		sigLen := len(vin.Signature)
+		r.SetBytes(vin.Signature[:(sigLen / 2)])
+		s.SetBytes(vin.Signature[(sigLen / 2):])
+
+		x := big.Int{}
+		y := big.Int{}
+		keyLen := len(vin.PublicKey)
+		x.SetBytes(vin.PublicKey[:(keyLen / 2)])
+		y.SetBytes(vin.PublicKey[(keyLen / 2):])
+		//ecdsa-椭圆曲线数字签名算法
+		rawPubKey := ecdsa.PublicKey{curve, &x, &y}
+		if ecdsa.Verify(&rawPubKey, txCopy.TxHash, &r, &s) == false {
+			fmt.Printf("开始验证 tx失败:%x\n",tx.TxHash)
+			return false
+		}
+	}
+	fmt.Printf("开始验证 tx成功:%x\n",tx.TxHash)
+	return true
 }
 
 func (tx *Transcation) Hash() [] byte {

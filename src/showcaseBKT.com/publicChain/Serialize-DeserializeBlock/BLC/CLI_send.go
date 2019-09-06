@@ -7,4 +7,6 @@ func (cli *CLI) Send(from []string, to []string, amount []string) {
 	defer blockchain.DB.Close()
 
 	blockchain.MineNewBlock(from, to, amount)
+
+
 }
