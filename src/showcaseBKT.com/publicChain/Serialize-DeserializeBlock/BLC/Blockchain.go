@@ -52,7 +52,7 @@ func (blockchian *Blockchain) Printchain() {
 		//fmt.Println("============START==============================")
 		fmt.Printf("当前区块Hash:%x\n", block.Hash)
 		fmt.Printf("前置区块BlockHash:%x\n", block.PrevBlockHash)
-		fmt.Printf("区块商度:%d \n", block.Height)
+		fmt.Printf("区块高度:%d \n", block.Height)
 		//fmt.Printf("Timestamp		:%s \n", time.Unix(block.Timestamp, 0).Format("2006-01-02 15:04:05"))
 		//fmt.Printf("Nonce			:%d \n", block.Nonce)
 
