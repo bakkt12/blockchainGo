@@ -50,9 +50,9 @@ func (blockchian *Blockchain) Printchain() {
 		block := blockchainIterator.Next()
 		//fmt.Println(block)
 		//fmt.Println("============START==============================")
-		fmt.Printf("Hash:%x\n", block.Hash)
-		fmt.Printf("PrevBlockHash:%x\n", block.PrevBlockHash)
-		fmt.Printf("Height:%d \n", block.Height)
+		fmt.Printf("当前区块Hash:%x\n", block.Hash)
+		fmt.Printf("前置区块BlockHash:%x\n", block.PrevBlockHash)
+		fmt.Printf("区块商度:%d \n", block.Height)
 		//fmt.Printf("Timestamp		:%s \n", time.Unix(block.Timestamp, 0).Format("2006-01-02 15:04:05"))
 		//fmt.Printf("Nonce			:%d \n", block.Nonce)
 
@@ -61,15 +61,18 @@ func (blockchian *Blockchain) Printchain() {
 			fmt.Printf("####交易id:%x\n", transcation.TxHash)
 			//fmt.Println("\t-------Vins:")
 			for _, in := range transcation.Vins {
-				fmt.Printf("\tvin txid:%x\n", in.TxHash)
+				fmt.Printf("> VIN 输入ID:%x:", in.TxHash)
+				fmt.Printf("\t\n")
 				fmt.Printf("\tvin voutIndex:%d\n", in.VoutIndex)
 				fmt.Printf("\tvin 付款人的公钥:%x\n", in.PublicKey)
-				fmt.Printf("\tvin 签名:%x\n", in.Signature)
+				fmt.Printf("\tvin 付款人的签名:%x\n", in.Signature)
+
 			}
 
 		//	fmt.Println("\t--------Vouts:")
 			for _, out := range transcation.Vouts {
-				fmt.Printf("\tvout 收款人的公钥:%x\n",( out.Ripemd160Hash))
+				fmt.Printf("< VOUT 收款人的公钥:%x", out.Ripemd160Hash)
+				fmt.Printf("\t\n")
 				fmt.Printf("\tvout 收款的金额数量:%d\n", out.Value)
 			}
 		//	fmt.Println("**************************")
@@ -279,6 +282,10 @@ func (blockchain *Blockchain) MineNewBlock(from []string, to []string, amount []
 		txs = append(txs, tx)
 	}
 
+	//创建挖矿的奖励的交易对象
+	cbtx := NewCoinbaseTransaction(from[0])
+	txs =append(txs,cbtx)
+
 	var block *Block
 	blockchain.DB.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(blocksBucket))
@@ -290,6 +297,7 @@ func (blockchain *Blockchain) MineNewBlock(from []string, to []string, amount []
 		}
 		return nil
 	})
+
 //在建立区块之前对交易Tx进行签名验证
  for _,tx:=range txs{
  	if blockchain.verifyTranscation(tx) ==false {
@@ -458,7 +466,6 @@ func  (bc*Blockchain) verifyTranscation(tx *Transcation) bool{
 	}
 
 	return tx.Verify(prevTxs)
-
 }
 //通过 ID 找到一笔交易（这需要在区块链上迭代所有区块）
 func (bc *Blockchain) FindTransction(ID []byte) (Transcation, error) {

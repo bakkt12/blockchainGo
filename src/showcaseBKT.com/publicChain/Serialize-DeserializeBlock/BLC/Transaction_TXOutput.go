@@ -2,7 +2,6 @@ package BLC
 
 import (
 	"bytes"
-	"fmt"
 )
 
 /**
@@ -42,7 +41,7 @@ func (out *TXOutput) Lock(address []byte) {
 func TransAddressToPubKeyhash(address []byte) []byte{
 	pubKeyHash := Base58Decode(address)
 	RIPEMD160Hasher:= pubKeyHash [1 : len(pubKeyHash)-4]
-	fmt.Printf("[transAddressToPubKeyhash]将地址转换回公钥:%s=>%x\n",string(address),RIPEMD160Hasher)
+	//fmt.Printf("[transAddressToPubKeyhash]将地址转换回公钥:%s=>%x\n",string(address),RIPEMD160Hasher)
 	return RIPEMD160Hasher;
 }
 

@@ -13,7 +13,7 @@ import (
 	"math/big"
 )
 
-const subsildy = 50
+const subsildy = 12.5
 
 /**
 交易 - 幕后细节
@@ -76,7 +76,7 @@ func NewCoinbaseTransaction(address string) *Transcation {
 	//创建创世的输入
 	txin := &TXInput{[]byte{}, -1, nil, []byte{}}
 	//创建输出
-	txout := NewTXOutput(50, address)
+	txout := NewTXOutput(10, address)
 	//创建交易
 	tx := Transcation{[]byte{}, []*TXInput{txin}, []*TXOutput{txout}}
 	tx.HashTransaction()
@@ -166,6 +166,7 @@ func (tx *Transcation) Sign(privKey ecdsa.PrivateKey, prevTXs map[string]Transca
 func (tx *Transcation) Verify(prevTXs map[string]Transcation) bool {
 	fmt.Printf("开始验证 tx:%x\n",tx.TxHash)
 	if tx.IsCoinbaseTransaction() {
+		fmt.Printf("是CoinbaseTransaction tx:%x\n",tx.TxHash)
 		return true
 	}
 	txCopy := tx.TrimmedCopy()
