@@ -29,6 +29,7 @@ func (cli *CLI) printUsage() {
 	fmt.Println("\tgetbalance			\t-address  \"要查询某一个账号的余额......\".")
 	fmt.Println("\tprintf				\t 输出所有区块的数据.........")
 	fmt.Println("\tsend				\t-from \"转账源地址...\" -to \"转账目的地地址...\"  -amount \"转账金额......\"")
+	fmt.Println("\ttest -- 测试.")
 }
 
 func (cli *CLI) Run() {
@@ -52,6 +53,8 @@ func (cli *CLI) Run() {
 	sendFrom := sendBlockCmd.String("from", "", "转账源地址...")
 	sendTo := sendBlockCmd.String("to", "", "转账目的地地址...")
 	sendAmount := sendBlockCmd.String("amount", "", "转账金额......")
+	testCmd :=flag .NewFlagSet("test", flag.ExitOnError)
+
 
 	switch os.Args[1] {
 
@@ -82,6 +85,11 @@ func (cli *CLI) Run() {
 		}
 	case "addresslist":
 		err := addresslistCmd.Parse(os.Args[2:])
+		if err != nil {
+			log.Panic(err)
+		}
+	case "test":
+		err := testCmd.Parse(os.Args[2:])
 		if err != nil {
 			log.Panic(err)
 		}
@@ -147,6 +155,11 @@ func (cli *CLI) Run() {
 	if addresslistCmd.Parsed() {
 		fmt.Println("开始输出创钱包地址....")
 		cli.getaddresslists()
+	}
+
+	if testCmd.Parsed() {
+		fmt.Println("开始测试....")
+		cli.testMethod()
 	}
 
 }
