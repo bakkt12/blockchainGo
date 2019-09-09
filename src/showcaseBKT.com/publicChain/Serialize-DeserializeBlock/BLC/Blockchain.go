@@ -69,13 +69,13 @@ func (blockchian *Blockchain) Printchain() {
 
 			}
 
-		//	fmt.Println("\t--------Vouts:")
+			//	fmt.Println("\t--------Vouts:")
 			for _, out := range transcation.Vouts {
 				fmt.Printf("< VOUT 收款人的公钥:%x", out.Ripemd160Hash)
 				fmt.Printf("\t\n")
 				fmt.Printf("\tvout 收款的金额数量:%d\n", out.Value)
 			}
-		//	fmt.Println("**************************")
+			//	fmt.Println("**************************")
 		}
 		fmt.Println("")
 		var hashBigInt big.Int
@@ -95,21 +95,8 @@ func (blockchain *Blockchain) UnUTXOs(address string, txs []*Transcation) []*UTX
 
 	var unUTXOs []*UTXO
 	//某个 tx 对应它已消费的input的VoutIndex, 001->int{0,1}
-	spentTXOutputs := make(map[string][]int)
-	fmt.Printf("[Blockchain.go]开始计算%s 地址对应的未花费的TXO\n",address)
-	for _, tx := range txs {
-		if tx.IsCoinbaseTransaction() == false {
-			for _, in := range tx.Vins {
-				//公钥hash
-				publicKey := Base58Decode([]byte(address))
-				ripemd160hash := publicKey[1 : len(publicKey)-4]
-
-				if in.UnlockRipedm160Hash(ripemd160hash) {
-					fmt.Println("打印所有txs ,tx hash- in hash-inindex:", hex.EncodeToString(tx.TxHash), ",in hash", hex.EncodeToString(in.TxHash), in.VoutIndex);
-				}
-			}
-		}
-	}
+	expentTXOutputs := make(map[string][]int)
+	fmt.Printf("[Blockchain.go][UnUTXOs]开始计算%s 地址对应的未花费的TXO\n", address)
 
 	for _, tx := range txs {
 		if tx.IsCoinbaseTransaction() == false {
@@ -121,15 +108,9 @@ func (blockchain *Blockchain) UnUTXOs(address string, txs []*Transcation) []*UTX
 
 				if in.UnlockRipedm160Hash(ripemd160hash) {
 					key := hex.EncodeToString(in.TxHash)
-					spentTXOutputs[key] = append(spentTXOutputs[key], in.VoutIndex)
+					expentTXOutputs[key] = append(expentTXOutputs[key], in.VoutIndex)
 				}
 			}
-		}
-	}
-	//fmt.Println("=======每个Txs中 已消费的 output===============")
-	for key, indexArray := range spentTXOutputs {
-		for _, voutIndex := range indexArray {
-			fmt.Println("已消费的output key - index:", key, voutIndex);
 		}
 	}
 
@@ -138,13 +119,13 @@ func (blockchain *Blockchain) UnUTXOs(address string, txs []*Transcation) []*UTX
 		for index, out := range tx.Vouts {
 			//是否已经被花费
 			if out.UnLockScriptPubKeyWithAddress(address) {
-				if len(spentTXOutputs) == 0 {
+				if len(expentTXOutputs) == 0 {
 					utxo := &UTXO{tx.TxHash, index, out}
 					fmt.Println("inser进UTXOs  len(spentTXOutputs) == 0 :", hex.EncodeToString(tx.TxHash), index, out);
 					unUTXOs = append(unUTXOs, utxo)
 				} else {
 					var isSpentUTXO bool
-					for txHash, indexArray := range spentTXOutputs {
+					for txHash, indexArray := range expentTXOutputs {
 						for _, voutIndex := range indexArray {
 							if index == voutIndex && txHash == hex.EncodeToString(tx.TxHash) {
 								isSpentUTXO = true
@@ -160,8 +141,7 @@ func (blockchain *Blockchain) UnUTXOs(address string, txs []*Transcation) []*UTX
 				}
 			} //end if
 		}
-	}//end range txs
-
+	} //end range txs
 
 	blockIterator := blockchain.Iterator()
 	for {
@@ -179,7 +159,7 @@ func (blockchain *Blockchain) UnUTXOs(address string, txs []*Transcation) []*UTX
 					if in.UnlockRipedm160Hash(ripemd160hash) {
 						//将transcation id(byte array) 转成string
 						key := hex.EncodeToString(in.TxHash)
-						spentTXOutputs[key] = append(spentTXOutputs[key], in.VoutIndex)
+						expentTXOutputs[key] = append(expentTXOutputs[key], in.VoutIndex)
 
 					}
 				}
@@ -192,12 +172,12 @@ func (blockchain *Blockchain) UnUTXOs(address string, txs []*Transcation) []*UTX
 
 				if out.UnLockScriptPubKeyWithAddress(address) {
 
-					if spentTXOutputs != nil {
-						if len(spentTXOutputs) != 0 {
+					if expentTXOutputs != nil {
+						if len(expentTXOutputs) != 0 {
 							//key->[]index
 							//map[cea12d33b2e7083221bf3401764fb661fd6c34fab50f5460e77628c42ca0e92b:[0]]
 							var isSpentUTXO bool
-							for txHash, indexArray := range spentTXOutputs {
+							for txHash, indexArray := range expentTXOutputs {
 								for _, voutIndex := range indexArray {
 									if index == voutIndex && txHash == hex.EncodeToString(tx.TxHash) {
 										isSpentUTXO = true
@@ -213,11 +193,8 @@ func (blockchain *Blockchain) UnUTXOs(address string, txs []*Transcation) []*UTX
 						} else {
 							utxo := &UTXO{tx.TxHash, index, out}
 							unUTXOs = append(unUTXOs, utxo)
-
 						}
 					}
-				}else{
-
 				}
 			} //end Vouts for
 		} //end tx for
@@ -230,10 +207,6 @@ func (blockchain *Blockchain) UnUTXOs(address string, txs []*Transcation) []*UTX
 			break;
 		}
 	} // end for
-
-	//for _, outx := range unUTXOs {
-	//	fmt.Printf ("打印未花费的UTXO index:%d ,TxHash %x\n:", outx.Index, (outx.TxHash))
-	//}
 
 	return unUTXOs
 }
@@ -260,7 +233,7 @@ func (blockchain *Blockchain) FindSpendableUTXOS(from string, amount int, txs []
 	} //end for
 
 	if value < int64(amount) {
-		fmt.Printf("[Blockchain.go] %s 转帐%d余额不足,帐户却只有%d !\n", from,amount,value)
+		fmt.Printf("[Blockchain.go] %s 转帐%d余额不足,帐户却只有%d !\n", from, amount, value)
 		os.Exit(1)
 	}
 	return value, spendableUTXO
@@ -284,7 +257,7 @@ func (blockchain *Blockchain) MineNewBlock(from []string, to []string, amount []
 
 	//创建挖矿的奖励的交易对象
 	cbtx := NewCoinbaseTransaction(from[0])
-	txs =append(txs,cbtx)
+	txs = append(txs, cbtx)
 
 	var block *Block
 	blockchain.DB.View(func(tx *bolt.Tx) error {
@@ -298,12 +271,12 @@ func (blockchain *Blockchain) MineNewBlock(from []string, to []string, amount []
 		return nil
 	})
 
-//在建立区块之前对交易Tx进行签名验证
- for _,tx:=range txs{
- 	if blockchain.verifyTranscation(tx) ==false {
- 		log.Panic("打包前对区块交易进行签名验证失败！")
+	//在建立区块之前对交易Tx进行签名验证
+	for _, tx := range txs {
+		if blockchain.verifyTranscation(tx) == false {
+			log.Panic("打包前对区块交易进行签名验证失败！")
+		}
 	}
- }
 
 	//2.创建区块
 	newBlock := NewBlock(txs, block.Height+1, block.Hash)
@@ -363,7 +336,6 @@ func CreateBlockchainWithGenesisBlock(genesisAddress string) *Blockchain {
 		fmt.Println("创世区块已经存在.......")
 		os.Exit(1)
 	}
-
 
 	//return &Blockchain{[]*Block{NewGenesisBlock()}}
 	//1.尝试打开或是创建数据库
@@ -454,12 +426,12 @@ func (blockchain *Blockchain) SignTranscation(tx *Transcation, privKey ecdsa.Pri
 	tx.Sign(privKey, prevTXs)
 }
 
-func  (bc*Blockchain) verifyTranscation(tx *Transcation) bool{
+func (bc *Blockchain) verifyTranscation(tx *Transcation) bool {
 
-	prevTxs := make(map[string] Transcation)
-	for _,vin :=range tx.Vins{
-		prevTx,err:= bc.FindTransction(vin.TxHash)
-		if err!=nil{
+	prevTxs := make(map[string]Transcation)
+	for _, vin := range tx.Vins {
+		prevTx, err := bc.FindTransction(vin.TxHash)
+		if err != nil {
 			log.Panic(err)
 		}
 		prevTxs[hex.EncodeToString(vin.TxHash)] = prevTx
@@ -467,6 +439,7 @@ func  (bc*Blockchain) verifyTranscation(tx *Transcation) bool{
 
 	return tx.Verify(prevTxs)
 }
+
 //通过 ID 找到一笔交易（这需要在区块链上迭代所有区块）
 func (bc *Blockchain) FindTransction(ID []byte) (Transcation, error) {
 	bci := bc.Iterator()
@@ -487,4 +460,65 @@ func (bc *Blockchain) FindTransction(ID []byte) (Transcation, error) {
 	}
 
 	return Transcation{}, nil
+}
+
+//查询所有 Transcation id->未花费的UTXO
+func (bc *Blockchain) FindUTXOMap() map[string]*TXOutputs {
+	blcIterator := bc.Iterator()
+	//已花费的 UTXO
+	expendUTXOMap := make(map[string][]*TXInput)
+
+	//可用的 UTXO
+	utxoMaps := make(map[string]*TXOutputs)
+	for {
+		block := blcIterator.Next()
+		//倒序查询
+		for i := len(block.Txs); i >= 0; i-- {
+			tx := block.Txs[i]
+			txOutputs := &TXOutputs{[]*TXOutput{}}
+			if tx.IsCoinbaseTransaction() == false {
+				for _, txInput := range tx.Vins {
+					txHash := hex.EncodeToString(txInput.TxHash)
+					expendUTXOMap[txHash] = append(expendUTXOMap[txHash], txInput)
+				}
+			}
+			txHash := hex.EncodeToString(tx.TxHash)
+		WorkOutLoop:
+			for index, out := range tx.Vouts {
+				txInputs := expendUTXOMap[txHash]
+				if len(txInputs) > 0 {
+					isSpent := false
+					for _, in := range txInputs {
+						ripemd160hash := out.Ripemd160Hash
+						publicKey := Ripemd160Hash(in.PublicKey)
+
+						if bytes.Compare(publicKey, ripemd160hash) == 0 {
+							if index == in.VoutIndex {
+								isSpent = true
+								continue WorkOutLoop
+							}
+						}
+					} //for txinputs
+
+					if isSpent == false {
+						//未花费
+						txOutputs.TxOutputs = append(txOutputs.TxOutputs, out)
+					}
+				} else {
+					txOutputs.TxOutputs = append(txOutputs.TxOutputs, out)
+				}
+			} //end WorkOutLoop
+			utxoMaps[txHash] = txOutputs
+		} //for tx
+
+		var hashBigInt big.Int
+		//是否到达创世区块
+		hashBigInt.SetBytes(block.PrevBlockHash)
+
+		if (hashBigInt.Cmp(big.NewInt(0)) == 0) {
+			break;
+		}
+	}
+
+	return utxoMaps
 }
